@@ -1,0 +1,103 @@
+grammar de.nittka.tooling.jtag.Jtag with org.eclipse.xtext.common.Terminals
+
+generate jtag "http://www.nittka.de/tooling/jtag/Jtag"
+
+Model:
+	JtagConfig|Folder;
+
+JtagConfig: 
+	{JtagConfig}
+	types+=CategoryType*
+	searches+=Search*
+;
+CategoryType: "categoriesFor" name=ID "{"
+	category+=Category (","category+=Category)*
+	"}"
+;
+Category: name=ID (description=STRING)? 
+	(
+		("{"category+=Category (","category+=Category)*"}")
+		|
+		("shortcutFor" "(" shortCuts+=ShortCut ("," shortCuts+=ShortCut)*")")
+	)?;
+
+Search:
+	"search" ("named" id=ID)?
+	search=SearchExpression
+;
+
+SearchExpression returns SearchExpression:
+	OrSearchExpression
+;
+
+OrSearchExpression returns SearchExpression:
+	AndSearchExpression ({OrSearchExpression.left=current} "||" right=AndSearchExpression)*
+;
+
+AndSearchExpression returns SearchExpression:
+	AtomicSearchExpression ({AndSearchExpression.left=current} "&&" right=AtomicSearchExpression)*
+;
+
+AtomicSearchExpression returns SearchExpression:
+	{NegationSearchExpression}'!' negated=AtomicSearchExpression |
+	SearchReference |
+	ParenthesizedSearchExpression |
+	CategorySearch|
+	TagSearch|
+	DescriptionSearch|
+	TitleSearch
+;
+
+
+ParenthesizedSearchExpression returns SearchExpression:
+	'(' SearchExpression')'
+;
+
+SearchReference returns SearchExpression:
+	"reuse" {SearchReference} search=[Search]
+;
+
+CategorySearch returns SearchExpression:
+	"category" {CategorySearch} category=ShortCut
+	(orAbove?="orAbove"? & orBelow?="orBelow"?)
+;
+
+TagSearch returns SearchExpression:
+	"tag" {TagSearch} tag=ID
+;
+
+DescriptionSearch returns SearchExpression:
+	"description" {DescriptionSearch} description=STRING
+;
+
+TitleSearch returns SearchExpression:
+	"title" {TitleSearch} title=STRING
+;
+
+Folder:
+	"folder_for" desc=STRING
+	(("ignore"":" ignore+=STRING)("," ignore+=STRING)*)?
+	categories+=CategoryRef*
+	(("tags"":" tags+=ID)("," tags+=ID)*)?
+
+	files+=File*
+;
+
+File: 
+	fileName=FileName
+	date=Date? 
+	title=STRING?
+	categories+=CategoryRef*
+	(("tags"":" tags+=ID)("," tags+=ID)*)?
+	("description" description=STRING)?
+	"."
+;
+
+FileName hidden(): fileName=(ID|STRING) '.' extension=ID;
+
+CategoryRef: type=[CategoryType] ":" (categories+=[Category] ("," categories+=[Category])*)";";
+ShortCut: type=[CategoryType]":" category=[Category];
+
+Date hidden():INT"-"INT"-"INT;
+terminal ID: ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'-'|'0'..'9')*;
+

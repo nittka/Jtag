@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/de.nittka.tooling.jtag.sdk_1.0.0.201702261113.jar" id="de.nittka.tooling.jtag.sdk" version="1.0.0.201702261113">
+      <category name="de.nittka.tooling.jtag.category"/>
+   </feature>
+   <category-def name="de.nittka.tooling.jtag.category" label="Jtag"/>
+</site>
