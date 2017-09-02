@@ -428,4 +428,13 @@
            sequence="M3+X">
      </key>
   </extension>
+    <extension
+      point="org.eclipse.ui.ide.resourceFilters">
+    <filter selected="true" pattern="*.*P*"></filter>
+    <filter selected="true" pattern="*.*p*"></filter>
+    <filter selected="true" pattern="*.w*"></filter>
+    <filter selected="true" pattern="*.M*"></filter>
+    <filter selected="true" pattern="*.AVI"></filter>
+  </extension>
+  
 </plugin>

@@ -3,10 +3,29 @@
  */
 package de.nittka.tooling.jtag.ui.contentassist
 
-import de.nittka.tooling.jtag.ui.contentassist.AbstractJtagProposalProvider
+import de.nittka.tooling.jtag.ui.search.JtagTagCounter
+import javax.inject.Inject
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.xtext.Assignment
+import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext
+import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor
 
 /**
  * see http://www.eclipse.org/Xtext/documentation.html#contentAssist on how to customize content assistant
  */
 class JtagProposalProvider extends AbstractJtagProposalProvider {
+
+	@Inject
+	var JtagTagCounter tagCounter;
+
+
+	override completeFile_Tags(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		val tags=tagCounter.getTags(model.eResource)
+		tags.forEach[acceptor.accept(createCompletionProposal(context))]
+	}
+
+	override completeTagSearch_Tag(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		val tags=tagCounter.getTags(model.eResource)
+		tags.forEach[acceptor.accept(createCompletionProposal(context))]
+	}
 }
