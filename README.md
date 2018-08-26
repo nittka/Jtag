@@ -1,6 +1,6 @@
 # Jtag
 
-##Scope
+## Scope
 
 This is intended to be a lightweight Xtext based photo tagging system. Technologically it is an slightly adapted copy of [Xarchive](https://github.com/nittka/Xarchive). Within a single project you keep 
 * a definition file for _categories_
@@ -16,7 +16,7 @@ Supported meta data includes
 * list of tags — additional keywords applying to the document
 * description
 
-##Syntax
+## Syntax
 
 ### definition file
 
@@ -73,7 +73,7 @@ description "late arrival because we first drove to the wrong hotel, everyone ex
 IMG_0274.jpg "departure".
 ```
 
-#Features
+# Features
 
 * define your own category hierarchies for describing your photos
 * hover showing category descriptions (if you provided them)
@@ -93,6 +93,6 @@ IMG_0274.jpg "departure".
   * boolean operations
   * combine existing (named) searches
 
-##Limitations
+## Limitations
 
 For simlicity file names, tags, categories etc. have a restricted character set (a-z, A-Z, digits, undersore and dash). File names containing other characters may be written as strings.
