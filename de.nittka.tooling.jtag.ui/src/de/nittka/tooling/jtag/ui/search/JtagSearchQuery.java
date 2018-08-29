@@ -1,14 +1,18 @@
 package de.nittka.tooling.jtag.ui.search;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.resource.IContainer;
 import org.eclipse.xtext.resource.IContainer.Manager;
 import org.eclipse.xtext.resource.IEObjectDescription;
@@ -35,6 +39,8 @@ public class JtagSearchQuery extends ReferenceQuery {
 	private ResourceDescriptionsProvider indexProvider;
 	@Inject
 	private IResourceServiceProvider serviceProvider;
+	@Inject
+	private JtagSearchResultPreview preview;
 
 	private JtagSearch search;
 
@@ -52,7 +58,20 @@ public class JtagSearchQuery extends ReferenceQuery {
 		result.reset();
 		internalRun(monitor, result);
 		result.finish();
+		maybeOpenBrowser(result);
 		return (monitor.isCanceled()) ? Status.CANCEL_STATUS : Status.OK_STATUS;
+	}
+
+	private void maybeOpenBrowser(ReferenceSearchResult result){
+		try {
+			if(!result.getMatchingReferences().isEmpty()){
+				File tempFile= ResourcesPlugin.getWorkspace().getRoot().getLocation().append(".metadata").append("JtagSearchPreview.html").toFile();
+				Files.write(tempFile.toPath(), preview.createHtml(result).getBytes());
+				PlatformUI.getWorkbench().getBrowserSupport().createBrowser("JtagSearchPreview").openURL(tempFile.toURL());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void internalRun(IProgressMonitor monitor, IAcceptor<IReferenceDescription> acceptor){

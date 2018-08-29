@@ -7,8 +7,12 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.resource.ILocationInFileProvider;
 import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler;
+import org.eclipse.xtext.ui.editor.hover.html.DefaultEObjectHoverProvider;
+import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
 
+import de.nittka.tooling.jtag.ui.hover.JTagEObjectHover;
+import de.nittka.tooling.jtag.ui.hover.JtagHoverProvider;
 import de.nittka.tooling.jtag.ui.linking.JtagFindReferencesHandler;
 import de.nittka.tooling.jtag.ui.linking.JtagHyperlinkHelper;
 import de.nittka.tooling.jtag.ui.linking.JtagLocationInFileProvider;
@@ -53,6 +57,14 @@ public class JtagUiModule extends de.nittka.tooling.jtag.ui.AbstractJtagUiModule
 
 	public Class<? extends FindReferencesHandler> bindXarchiveReferenceFinder(){
 		return JtagFindReferencesHandler.class;
+	}
+
+	public Class<? extends DefaultEObjectHoverProvider> bindEHoverProvider(){
+		return JtagHoverProvider.class;
+	}
+
+	public Class<? extends IEObjectHoverDocumentationProvider> bindEObjectHover(){
+		return JTagEObjectHover.class;
 	}
 
 //	public Class<? extends XtextTemplateContextType> bindTemplateContextType() {
