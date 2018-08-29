@@ -436,5 +436,10 @@
     <filter selected="true" pattern="*.M*"></filter>
     <filter selected="true" pattern="*.AVI"></filter>
   </extension>
+  <extension point="org.eclipse.ui.views">
+    <view id="de.nittka.tooling.jtag.imageView"
+      name="Jtag Image View"
+      class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:de.nittka.tooling.jtag.ui.view.JTagImageView"/>
+  </extension>
   
 </plugin>
