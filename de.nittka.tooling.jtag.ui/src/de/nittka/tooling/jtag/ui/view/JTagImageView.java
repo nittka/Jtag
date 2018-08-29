@@ -37,6 +37,7 @@ import de.nittka.tooling.jtag.ui.JtagXtextEditor;
 public class JTagImageView extends ViewPart implements ISelectionListener, IPartListener, ISelectionChangedListener {
 
 	private Composite imageDisplay;
+	private int PADDING=20;
 	private Image currentImage;
 
 	@Override
@@ -141,17 +142,18 @@ public class JTagImageView extends ViewPart implements ISelectionListener, IPart
 	private void showImage(Image image){
 		if(image!=null){
 			ImageData imageData = image.getImageData();
-			Point imageSize=getImageSize(imageDisplay.getParent().getSize(), imageData);
+			Point availableSize=imageDisplay.getParent().getSize();
+			Point imageSize=getImageSize(availableSize, imageData);
 			Image scaled=new Image(imageDisplay.getDisplay(),imageData.scaledTo(imageSize.x, imageSize.y));
 			imageDisplay.setSize(scaled.getImageData().width, scaled.getImageData().height);
 			imageDisplay.setBackgroundImage(scaled);
-			imageDisplay.setLocation(10, 10);
+			imageDisplay.setLocation((availableSize.x-imageSize.x)/2, (availableSize.y-imageSize.y)/2);
 		}
 	}
 
 	private Point getImageSize(Point availableSpace, ImageData imageData){
-		float maxWidth=availableSpace.x-20;
-		float maxHeight=availableSpace.y-20;
+		float maxWidth=availableSpace.x-PADDING;
+		float maxHeight=availableSpace.y-PADDING;
 		float ratio=maxWidth/maxHeight;
 
 		float imageWidth=imageData.width;
