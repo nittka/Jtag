@@ -11,6 +11,8 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
@@ -58,6 +60,24 @@ public class JTagImageView extends ViewPart implements ISelectionListener, IPart
 	public void createPartControl(Composite parent) {
 		imageDisplay=new Composite(parent, SWT.NONE);
 		imageDisplay.setBackgroundMode(SWT.INHERIT_FORCE);
+		ensureRedrawOnResize();
+	}
+
+	private void ensureRedrawOnResize(){
+		//disable image when resizing parent
+		imageDisplay.getParent().addControlListener(new ControlAdapter() {
+			@Override
+			public void controlResized(ControlEvent e) {
+				imageDisplay.setBackgroundImage(null);
+			}
+		});
+		//redraw when resizing image composite
+		imageDisplay.addControlListener(new ControlAdapter() {
+			@Override
+			public void controlResized(ControlEvent e) {
+				showImage(currentImage);
+			}
+		});
 	}
 
 	@Override
