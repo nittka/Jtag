@@ -120,7 +120,7 @@ public class JTagImageView extends ViewPart implements ISelectionListener, IPart
 					return;
 				}
 			}
-			showFile(null, true);
+			hideFile();
 		}
 	}
 
@@ -138,12 +138,18 @@ public class JTagImageView extends ViewPart implements ISelectionListener, IPart
 						if(fileNode.getOffset()<=selection.getOffset()){
 							String imageLocation = JtagFileURIs.getImageLocation(file);
 							showFile(imageLocation, false);
+							return null;
 						}
 					}
+					hideFile();
 					return null;
 				}
 			});
 		}
+	}
+
+	private void hideFile(){
+		showFile(null, true);
 	}
 
 	private void showFile(String fileLocation, boolean force){
