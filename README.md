@@ -76,7 +76,9 @@ IMG_0274.jpg "departure".
 # Features
 
 * define your own category hierarchies for describing your photos
-* hover showing category descriptions (if you provided them)
+* hover
+  * on category shows descriptions (if you provided them)
+  * on file name shows image thumbnail
 * content assist
   * keywords
   * categories
@@ -84,7 +86,7 @@ IMG_0274.jpg "departure".
   * document not found
   * missing metadata for a file within a folder
 * navigation using F3
-  * opening the original document
+  * opening the original image
   * navigate to the category definition
 * find references `Shift-Ctrl-G`
   * where is the given category used (excluding short cuts or via category hierarchy)
@@ -92,6 +94,8 @@ IMG_0274.jpg "departure".
   * search referenced categories, tags, titles, descriptions
   * boolean operations
   * combine existing (named) searches
+  * resulting images are rendered in external web-browser
+* view showing the image currently selected in navigator/editor
 
 ## Limitations
 
