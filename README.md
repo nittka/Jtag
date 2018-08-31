@@ -100,3 +100,12 @@ IMG_0274.jpg "departure".
 ## Limitations
 
 For simlicity file names, tags, categories etc. have a restricted character set (a-z, A-Z, digits, undersore and dash). File names containing other characters may be written as strings.
+
+## Installation
+
+You need an Eclipse with an Xtext runtime (2.4. or later).
+The Jtag update site is [https://www.nittka.de/download/jtag](https://www.nittka.de/download/jtag).
+I might provide an Oomph setup file in the future.
+
+metadata-extractor.jar is used under the The Apache Software License, Version 2.0, xmp-core under the BSD License [see](https://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html).
+Both are only used for extracting the date of a picture for the missing description quickfix.
