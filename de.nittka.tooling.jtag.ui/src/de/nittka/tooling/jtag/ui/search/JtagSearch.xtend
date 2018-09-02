@@ -74,7 +74,7 @@ class JtagSearch {
 	}
 
 	def private String userData(String key){
-		Optional.of(desc.getUserData(key)).or("");
+		Optional.fromNullable(desc.getUserData(key)).or("");
 	}
 
 	def private dispatch boolean internalApply(TagSearch exp){
