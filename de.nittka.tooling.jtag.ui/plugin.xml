@@ -441,5 +441,18 @@
       name="Jtag Image View"
       class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:de.nittka.tooling.jtag.ui.view.JTagImageView"/>
   </extension>
+  <extension point="org.eclipse.ui.perspectives">
+    <perspective class="de.nittka.tooling.jtag.ui.JtagPerspective" id="de.nittka.tooling.jtag.perspective" name="Jtag"/>
+  </extension>
+  <extension point="org.eclipse.ui.perspectiveExtensions">
+    <perspectiveExtension targetID="de.nittka.tooling.jtag.perspective">
+      <view id="org.eclipse.ui.views.ResourceNavigator" minimized="false" ratio="0.2" relationship="left" relative="org.eclipse.ui.editorss"/>
+      <view id="de.nittka.tooling.jtag.imageView" minimized="false" ratio="0.50" relationship="bottom" relative="org.eclipse.ui.editorss"/>
+      <view id="org.eclipse.ui.views.ContentOutline" minimized="false" ratio="0.50" relationship="right" relative="de.nittka.tooling.jtag.imageView"/>
+      <view id="org.eclipse.ui.views.ProblemView" minimized="false" relationship="stack"  relative="org.eclipse.ui.views.ContentOutline"/>
+      <viewShortcut id="de.nittka.tooling.jtag.imageView"/>
+      <!--newWizardShortcut id="de.nittka.tooling.jtag.newFileWizards"/-->
+    </perspectiveExtension>
+  </extension>
   
 </plugin>
