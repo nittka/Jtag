@@ -1,5 +1,7 @@
 package de.nittka.tooling.jtag.ui.view;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.text.TextSelection;
@@ -30,6 +32,7 @@ import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.XtextSourceViewer;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
+import org.eclipse.xtext.ui.editor.outline.impl.EObjectNode;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 
 import de.nittka.tooling.jtag.jtag.File;
@@ -118,10 +121,33 @@ public class JTagImageView extends ViewPart implements ISelectionListener, IPart
 				if(element instanceof IFile){
 					showFile(((IFile) element).getLocation().toString(), true);
 					return;
+				}else if(element instanceof EObjectNode){
+					if(isPreviewFromOutline((EObjectNode)element)){
+						return;
+					}
 				}
 			}
 			hideFile();
 		}
+	}
+
+	private boolean isPreviewFromOutline(final EObjectNode outlineNode){
+		final AtomicBoolean previewShown=new AtomicBoolean(false);
+		if("jtag".equals(outlineNode.getEObjectURI().fileExtension())){
+			outlineNode.getDocument().readOnly(new IUnitOfWork<Void, XtextResource>() {
+
+				public java.lang.Void exec(XtextResource state) throws Exception {
+					EObject objectNode = state.getEObject(outlineNode.getEObjectURI().fragment());
+					if(objectNode instanceof File){
+						String imageLocation = JtagFileURIs.getImageLocation((File)objectNode);
+						showFile(imageLocation, false);
+						previewShown.set(true);
+					}
+					return null;
+				}
+			});
+		}
+		return previewShown.get();
 	}
 
 	public void selectionChanged(SelectionChangedEvent event) {
