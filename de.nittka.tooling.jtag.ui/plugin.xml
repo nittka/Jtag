@@ -450,6 +450,7 @@
         <contentExtension pattern="org.eclipse.ui.navigator.resources.linkHelper"/>
         <contentExtension pattern="org.eclipse.ui.navigator.resources.workingSets"/>
         <contentExtension pattern="de.nittka.tooling.jtag.filters.nonjtag"/>
+        <contentExtension pattern="de.nittka.tooling.jtag.fileNameSorting"/>
       </includes>
     </viewerContentBinding>
     <viewerActionBinding viewerId="de.nittka.tooling.jtag.navigatorView">
@@ -468,6 +469,9 @@
           </adapt>
        </filterExpression>
     </commonFilter>
+    <navigatorContent id="de.nittka.tooling.jtag.fileNameSorting" name="Sort: jtag files first" sortOnly="true">
+      <commonSorter class="de.nittka.tooling.jtag.ui.view.JtagFileSorter"/>
+    </navigatorContent>
   </extension>
   <extension point="org.eclipse.ui.perspectives">
     <perspective class="de.nittka.tooling.jtag.ui.JtagPerspective" id="de.nittka.tooling.jtag.perspective" name="Jtag"/>
