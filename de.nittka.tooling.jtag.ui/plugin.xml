@@ -472,6 +472,25 @@
     <navigatorContent id="de.nittka.tooling.jtag.fileNameSorting" name="Sort: jtag files first" sortOnly="true">
       <commonSorter class="de.nittka.tooling.jtag.ui.view.JtagFileSorter"/>
     </navigatorContent>
+    <commonWizard type="new" wizardId="de.nittka.tooling.jtag.newFileWizard">
+      <enablement>
+        <or>
+          <adapt type="org.eclipse.core.resources.IFolder" />
+          <adapt type="org.eclipse.core.resources.IProject" /> 
+          <adapt type="org.eclipse.core.resources.IWorkspaceRoot" /> 
+        </or>
+      </enablement>
+    </commonWizard>
+  </extension>
+  <extension point="org.eclipse.ui.newWizards">
+    <category id="de.nittka.tooling.jtag.wizardCategory" name="Jtag"/>
+    <wizard id="de.nittka.tooling.jtag.newFileWizard"
+      category="de.nittka.tooling.jtag.wizardCategory" 
+      class="de.nittka.tooling.jtag.ui.wizard.JtagFileWizard"
+      finalPerspective="de.nittka.tooling.jtag.ui.JtagPerspective"
+      name="Jtag file"
+      project="false"
+    />
   </extension>
   <extension point="org.eclipse.ui.perspectives">
     <perspective class="de.nittka.tooling.jtag.ui.JtagPerspective" id="de.nittka.tooling.jtag.perspective" name="Jtag"/>
@@ -484,7 +503,7 @@
       <view id="org.eclipse.ui.views.ProblemView" minimized="false" relationship="stack"  relative="org.eclipse.ui.views.ContentOutline"/>
       <viewShortcut id="de.nittka.tooling.jtag.imageView"/>
       <viewShortcut id="de.nittka.tooling.jtag.navigatorView"/>
-      <!--newWizardShortcut id="de.nittka.tooling.jtag.newFileWizards"/-->
+      <newWizardShortcut id="de.nittka.tooling.jtag.newFileWizard"/>
     </perspectiveExtension>
   </extension>
   
