@@ -428,29 +428,58 @@
            sequence="M3+X">
      </key>
   </extension>
-    <extension
-      point="org.eclipse.ui.ide.resourceFilters">
-    <filter selected="true" pattern="*.*P*"></filter>
-    <filter selected="true" pattern="*.*p*"></filter>
-    <filter selected="true" pattern="*.w*"></filter>
-    <filter selected="true" pattern="*.M*"></filter>
-    <filter selected="true" pattern="*.AVI"></filter>
-  </extension>
   <extension point="org.eclipse.ui.views">
+    <category id="de.nittka.tooling.jtag.viewCategory" name="Jtag"/>
     <view id="de.nittka.tooling.jtag.imageView"
+      category="de.nittka.tooling.jtag.viewCategory"
       name="Jtag Image View"
       class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:de.nittka.tooling.jtag.ui.view.JTagImageView"/>
+    <view id="de.nittka.tooling.jtag.navigatorView"
+      category="de.nittka.tooling.jtag.viewCategory"
+      name="Jtag Navigator"
+      class="org.eclipse.ui.navigator.CommonNavigator"
+      restorable="true"/>
+  </extension>
+  <extension point="org.eclipse.ui.navigator.viewer">
+    <viewer viewerId="de.nittka.tooling.jtag.navigatorView"/>
+    <viewerContentBinding viewerId="de.nittka.tooling.jtag.navigatorView">
+      <includes>
+        <contentExtension pattern="org.eclipse.ui.navigator.resourceContent"/>
+        <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.startsWithDot"/>
+        <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.closedProject"/>
+        <contentExtension pattern="org.eclipse.ui.navigator.resources.linkHelper"/>
+        <contentExtension pattern="org.eclipse.ui.navigator.resources.workingSets"/>
+        <contentExtension pattern="de.nittka.tooling.jtag.filters.nonjtag"/>
+      </includes>
+    </viewerContentBinding>
+    <viewerActionBinding viewerId="de.nittka.tooling.jtag.navigatorView">
+      <includes>
+        <actionExtension pattern="org.eclipse.ui.navigator.resources.*"/>
+      </includes>
+    </viewerActionBinding>
+  </extension>
+  <extension point="org.eclipse.ui.navigator.navigatorContent">
+    <commonFilter id="de.nittka.tooling.jtag.filters.nonjtag" name="non jtag files" activeByDefault="false">
+       <filterExpression>
+          <adapt type="org.eclipse.core.resources.IFile">
+            <not>
+              <test property="org.eclipse.core.resources.name" value="*.jtag"/>
+            </not>
+          </adapt>
+       </filterExpression>
+    </commonFilter>
   </extension>
   <extension point="org.eclipse.ui.perspectives">
     <perspective class="de.nittka.tooling.jtag.ui.JtagPerspective" id="de.nittka.tooling.jtag.perspective" name="Jtag"/>
   </extension>
   <extension point="org.eclipse.ui.perspectiveExtensions">
     <perspectiveExtension targetID="de.nittka.tooling.jtag.perspective">
-      <view id="org.eclipse.ui.views.ResourceNavigator" minimized="false" ratio="0.2" relationship="left" relative="org.eclipse.ui.editorss"/>
+      <view id="de.nittka.tooling.jtag.navigatorView" minimized="false" ratio="0.2" relationship="left" relative="org.eclipse.ui.editorss"/>
       <view id="de.nittka.tooling.jtag.imageView" minimized="false" ratio="0.50" relationship="bottom" relative="org.eclipse.ui.editorss"/>
       <view id="org.eclipse.ui.views.ContentOutline" minimized="false" ratio="0.50" relationship="right" relative="de.nittka.tooling.jtag.imageView"/>
       <view id="org.eclipse.ui.views.ProblemView" minimized="false" relationship="stack"  relative="org.eclipse.ui.views.ContentOutline"/>
       <viewShortcut id="de.nittka.tooling.jtag.imageView"/>
+      <viewShortcut id="de.nittka.tooling.jtag.navigatorView"/>
       <!--newWizardShortcut id="de.nittka.tooling.jtag.newFileWizards"/-->
     </perspectiveExtension>
   </extension>
