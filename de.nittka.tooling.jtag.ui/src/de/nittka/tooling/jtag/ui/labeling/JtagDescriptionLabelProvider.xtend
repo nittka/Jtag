@@ -6,6 +6,7 @@ package de.nittka.tooling.jtag.ui.labeling
 import org.eclipse.xtext.resource.IEObjectDescription
 import org.eclipse.xtext.ui.label.DefaultDescriptionLabelProvider
 import de.nittka.tooling.jtag.jtag.JtagPackage
+import org.eclipse.xtext.resource.IResourceDescription
 
 //import org.eclipse.xtext.resource.IEObjectDescription
 
@@ -27,10 +28,21 @@ class JtagDescriptionLabelProvider extends DefaultDescriptionLabelProvider {
 	}
 
 	override image(IEObjectDescription ele) {
+		println(ele.EObjectURI)
 		val clazz = ele.EClass
 		switch clazz{
 			case JtagPackage.eINSTANCE.file: return "jtagfile.gif"
-			case JtagPackage.eINSTANCE.jtagConfig: return "categories.gif"
+			case JtagPackage.eINSTANCE.jtagConfig: return "categorytype.gif"
 		}
 	}
+
+	override image(IResourceDescription element) {
+		if(element.getExportedObjectsByType(JtagPackage.eINSTANCE.file).empty){
+			return "categories.gif"
+		}else{
+			return "folder.png"
+		}
+	}
+
+
 }
