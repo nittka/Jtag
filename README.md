@@ -82,6 +82,7 @@ IMG_0274.jpg "departure".
 * content assist
   * keywords
   * categories
+  * (already used) tags
 * validation (+ quickfixes for some)
   * document not found
   * missing metadata for a file within a folder
@@ -90,12 +91,22 @@ IMG_0274.jpg "departure".
   * navigate to the category definition
 * find references `Shift-Ctrl-G`
   * where is the given category used (excluding short cuts or via category hierarchy)
-* define searches (invoked with `Alt-X` on the definition); matches are shown in the search view
+* user defined searches (invoked with `Alt-X` on the definition)
+  * matches are shown in the search view
   * search referenced categories, tags, titles, descriptions
   * boolean operations
   * combine existing (named) searches
   * resulting images are rendered in external web-browser
-* view showing the image currently selected in navigator/editor
+* view showing the image currently selected in
+  * navigator
+  * editor
+  * outline
+  * search view
+* Jtag perspective
+  * default views (navigator, image preview, problems/outliene)
+  * navigator with quick access to new jtag file wizard
+  * optional navigator filter (show only jtag files)
+  * navigator sorting (jtag file before any other files)
 
 ## Limitations
 
