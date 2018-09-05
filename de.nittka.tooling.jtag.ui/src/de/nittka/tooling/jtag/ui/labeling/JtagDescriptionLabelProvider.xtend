@@ -28,7 +28,6 @@ class JtagDescriptionLabelProvider extends DefaultDescriptionLabelProvider {
 	}
 
 	override image(IEObjectDescription ele) {
-		println(ele.EObjectURI)
 		val clazz = ele.EClass
 		switch clazz{
 			case JtagPackage.eINSTANCE.file: return "jtagfile.gif"
