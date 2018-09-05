@@ -438,6 +438,7 @@
       category="de.nittka.tooling.jtag.viewCategory"
       name="Jtag Navigator"
       class="org.eclipse.ui.navigator.CommonNavigator"
+      icon="icons/navigator.gif"
       restorable="true"/>
   </extension>
   <extension point="org.eclipse.ui.navigator.viewer">
