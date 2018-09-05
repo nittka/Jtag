@@ -433,6 +433,7 @@
     <view id="de.nittka.tooling.jtag.imageView"
       category="de.nittka.tooling.jtag.viewCategory"
       name="Jtag Image View"
+      icon="icons/jtagfile.gif"
       class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:de.nittka.tooling.jtag.ui.view.JTagImageView"/>
     <view id="de.nittka.tooling.jtag.navigatorView"
       category="de.nittka.tooling.jtag.viewCategory"
@@ -494,12 +495,13 @@
       category="de.nittka.tooling.jtag.wizardCategory" 
       class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:de.nittka.tooling.jtag.ui.wizard.JtagFileWizard"
       finalPerspective="de.nittka.tooling.jtag.ui.JtagPerspective"
+      icon="icons/filewizard.gif"
       name="Jtag file"
       project="false"
     />
   </extension>
   <extension point="org.eclipse.ui.perspectives">
-    <perspective class="de.nittka.tooling.jtag.ui.JtagPerspective" id="de.nittka.tooling.jtag.perspective" name="Jtag"/>
+    <perspective class="de.nittka.tooling.jtag.ui.JtagPerspective" id="de.nittka.tooling.jtag.perspective" name="Jtag" icon="icons/perspective.gif"/>
   </extension>
   <extension point="org.eclipse.ui.perspectiveExtensions">
     <perspectiveExtension targetID="de.nittka.tooling.jtag.perspective">
