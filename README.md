@@ -54,7 +54,7 @@ categoriesFor occasion {
 
 ```
 //global information
-folder_for "Vacation 2017"
+folder "Vacation 2017"
 ignore: "*.txt", "ignore.jpg"
 occasion: vacation;
 tags: Sweden

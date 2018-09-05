@@ -121,7 +121,7 @@ public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements o
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					IFile newFile = folder.getFile(new Path(currentValidFileName));
 					try {
-						newFile.create(new StringInputStream("folder_for \"\""), true, monitor);
+						newFile.create(new StringInputStream("folder \"short description of folder content\""), true, monitor);
 						fileOpener.openFileToEdit(getShell(), newFile);
 						monitor.done();
 					} catch (CoreException e) {

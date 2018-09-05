@@ -75,7 +75,7 @@ TitleSearch returns SearchExpression:
 ;
 
 Folder:
-	"folder_for" desc=STRING
+	"folder" desc=STRING
 	(("ignore"":" ignore+=STRING)("," ignore+=STRING)*)?
 	categories+=CategoryRef*
 	(("tags"":" tags+=ID)("," tags+=ID)*)?
