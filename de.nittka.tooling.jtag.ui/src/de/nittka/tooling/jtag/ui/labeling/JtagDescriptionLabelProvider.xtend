@@ -27,8 +27,10 @@ class JtagDescriptionLabelProvider extends DefaultDescriptionLabelProvider {
 	}
 
 	override image(IEObjectDescription ele) {
-		if(ele.EClass===JtagPackage.eINSTANCE.file){
-			return "jtagfile.gif"
+		val clazz = ele.EClass
+		switch clazz{
+			case JtagPackage.eINSTANCE.file: return "jtagfile.gif"
+			case JtagPackage.eINSTANCE.jtagConfig: return "categories.gif"
 		}
 	}
 }
