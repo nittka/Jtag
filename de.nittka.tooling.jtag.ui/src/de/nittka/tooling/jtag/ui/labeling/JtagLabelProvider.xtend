@@ -6,6 +6,9 @@ package de.nittka.tooling.jtag.ui.labeling
 import com.google.inject.Inject
 import de.nittka.tooling.jtag.jtag.Category
 import de.nittka.tooling.jtag.jtag.File
+import de.nittka.tooling.jtag.jtag.Folder
+import de.nittka.tooling.jtag.jtag.JtagConfig
+import de.nittka.tooling.jtag.jtag.Search
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider
 import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider
 
@@ -37,7 +40,20 @@ class JtagLabelProvider extends DefaultEObjectLabelProvider {
 			return result;
 		}
 	}
-//	def image(Greeting ele) {
-//		'Greeting.gif'
-//	}
+
+	def image(Folder f){
+		return "folder.png";
+	}
+
+	def image(File f){
+		return "jtagfile.gif";
+	}
+
+	def image(Search s){
+		return "search.png"
+	}
+
+	def image(JtagConfig s){
+		return "categories.png"
+	}
 }

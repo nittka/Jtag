@@ -26,7 +26,9 @@ class JtagDescriptionLabelProvider extends DefaultDescriptionLabelProvider {
 		super.text(ele)
 	}
 
-//	override image(IEObjectDescription ele) {
-//		ele.EClass.name + '.gif'
-//	}	 
+	override image(IEObjectDescription ele) {
+		if(ele.EClass===JtagPackage.eINSTANCE.file){
+			return "jtagfile.gif"
+		}
+	}
 }
