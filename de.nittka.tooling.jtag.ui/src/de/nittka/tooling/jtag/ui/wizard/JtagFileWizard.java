@@ -6,6 +6,8 @@ import javax.inject.Inject;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
@@ -88,6 +90,30 @@ public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements o
 		String proposedJtagName = folder.getName().replace('.', '_').replaceAll("\\s", "_");
 		nameField.setText(proposedJtagName+".jtag");
 		nameField.setSelection(0, proposedJtagName.length());
+
+		addExistingJtagFileHint(nameGroup);
+	}
+
+	private void addExistingJtagFileHint(Composite parent){
+		if(folder instanceof IFolder){
+			try {
+				for (IResource r : folder.members()) {
+					if(r instanceof IFile){
+						if("jtag".equals(r.getFileExtension())){
+							Label l=new Label(parent, SWT.NONE);
+							l.setFont(parent.getFont());
+							l.setText("The folder already contains a jtag file: "+r.getName());
+							GridData d=new GridData();
+							d.horizontalSpan=2;
+							l.setLayoutData(d);
+							return;
+						}
+					}
+				}
+			} catch (CoreException e) {
+				//ignore
+			}
+		}
 	}
 
 	private void handleNameModify(String name){
