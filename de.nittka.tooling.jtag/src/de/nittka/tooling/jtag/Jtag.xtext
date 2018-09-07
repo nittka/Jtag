@@ -10,7 +10,7 @@ JtagConfig:
 	types+=CategoryType*
 	searches+=Search*
 ;
-CategoryType: "categoriesFor" name=ID "{"
+CategoryType: "categoriesFor" name=ID (description=STRING)? "{"
 	category+=Category (","category+=Category)*
 	"}"
 ;

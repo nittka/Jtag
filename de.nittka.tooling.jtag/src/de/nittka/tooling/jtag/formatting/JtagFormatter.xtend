@@ -48,12 +48,12 @@ class JtagFormatter extends AbstractDeclarativeFormatter {
 		c.setLinewrap(1).before(categoryRefRule)
 
 		//config
-		c.setLinewrap(2).after(categoryTypeAccess.rightCurlyBracketKeyword_5)
+		c.setLinewrap(2).after(categoryTypeAccess.rightCurlyBracketKeyword_6)
 
-		c.setLinewrap(1).around(categoryTypeAccess.categoryAssignment_3)
-		c.setLinewrap(1).around(categoryTypeAccess.categoryAssignment_4_1)
-		c.setIndentationIncrement.after(categoryTypeAccess.leftCurlyBracketKeyword_2)
-		c.setIndentationDecrement.before(categoryTypeAccess.rightCurlyBracketKeyword_5)
+		c.setLinewrap(1).around(categoryTypeAccess.categoryAssignment_4)
+		c.setLinewrap(1).around(categoryTypeAccess.categoryAssignment_5_1)
+		c.setIndentationIncrement.after(categoryTypeAccess.leftCurlyBracketKeyword_3)
+		c.setIndentationDecrement.before(categoryTypeAccess.rightCurlyBracketKeyword_6)
 
 		c.setLinewrap(1).around(categoryAccess.categoryAssignment_2_0_1)
 		c.setLinewrap(1).around(categoryAccess.categoryAssignment_2_0_2_1)

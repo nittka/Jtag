@@ -31,6 +31,10 @@ class JtagLabelProvider extends DefaultEObjectLabelProvider {
 		if(doc.title!==null)'''«doc.fileName.fileName» - «doc.title»'''else doc?.fileName?.fileName
 	}
 
+	def String text(CategoryType type){
+		val desc=type.description
+		return if(desc!==null)'''«type.name» («desc»)'''else type.name
+	}
 
 	def String text(Category cat){
 		val desc=cat.description

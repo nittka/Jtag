@@ -21,10 +21,10 @@ Supported meta data includes
 ### definition file
 
 ```
-categoriesFor status {
+categoriesFor status "optional description of category type" {
   done,
   //a category may have a description (e.g. shown in hover)
-  metaDataIncomplete "doc is registered, but meta data has to be completed",
+  metaDataIncomplete "image is registered, but meta data has to be completed",
   //a category may have sub categories
   todo {
     titleMissing,
