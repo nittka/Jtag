@@ -98,7 +98,7 @@
     <extension
             point="org.eclipse.ui.preferencePages">
         <page
-            class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:de.nittka.tooling.jtag.ui.preferences.JtagRootPreferencePage"
             id="de.nittka.tooling.jtag.Jtag"
             name="Jtag">
             <keywordReference id="de.nittka.tooling.jtag.ui.keyword_Jtag"/>
@@ -514,5 +514,7 @@
       <newWizardShortcut id="de.nittka.tooling.jtag.newFileWizard"/>
     </perspectiveExtension>
   </extension>
-  
+  <extension point="org.eclipse.core.runtime.preferences">
+    <initializer class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:de.nittka.tooling.jtag.ui.preferences.JtagPreferenceInitializer"/>
+  </extension>
 </plugin>

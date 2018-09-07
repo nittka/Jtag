@@ -24,6 +24,7 @@ import org.eclipse.xtext.resource.impl.DefaultReferenceDescription;
 import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider;
 import org.eclipse.xtext.ui.editor.findrefs.ReferenceQuery;
 import org.eclipse.xtext.ui.editor.findrefs.ReferenceSearchResult;
+import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreAccess;
 import org.eclipse.xtext.util.IAcceptor;
 import org.eclipse.xtext.xbase.lib.IteratorExtensions;
 
@@ -31,6 +32,7 @@ import com.google.common.io.Files;
 
 import de.nittka.tooling.jtag.jtag.JtagPackage;
 import de.nittka.tooling.jtag.jtag.Search;
+import de.nittka.tooling.jtag.ui.preferences.JtagRootPreferencePage;
 
 //we derive from ReferenceQuery in order to reuse much of Xtext's search infrastructure
 //in particular result presentation in the Search View, which is bound to the
@@ -43,6 +45,9 @@ public class JtagSearchQuery extends ReferenceQuery {
 	private IResourceServiceProvider serviceProvider;
 	@Inject
 	private JtagSearchResultPreview preview;
+	@Inject
+	private IPreferenceStoreAccess preferenceStoreAccess;
+
 
 	private JtagSearch search;
 
@@ -66,7 +71,8 @@ public class JtagSearchQuery extends ReferenceQuery {
 
 	private void maybeOpenBrowser(ReferenceSearchResult result){
 		try {
-			if(!result.getMatchingReferences().isEmpty()){
+			boolean openHtmlWanted=preferenceStoreAccess.getPreferenceStore().getBoolean(JtagRootPreferencePage.OPEN_HTML_BROWSER_ON_JTAG_SEARCH);
+			if(openHtmlWanted && !result.getMatchingReferences().isEmpty()){
 				File tempFile= ResourcesPlugin.getWorkspace().getRoot().getLocation().append(".metadata").append("JtagSearchPreview.html").toFile();
 				Files.write(preview.createHtml(result), tempFile, StandardCharsets.ISO_8859_1);
 				PlatformUI.getWorkbench().getBrowserSupport().createBrowser("JtagSearchPreview").openURL(tempFile.toURL());
