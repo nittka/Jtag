@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Project
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
+    name="Jtag"
+    label="Jtag">
+  <setupTask
+      xsi:type="setup.p2:P2Task"
+      id="jtag.udatesites"
+      label="">
+    <requirement
+        name="org.eclipse.xtext.redist.feature.group"
+        versionRange="2.4.0"/>
+    <requirement
+        name="de.nittka.tooling.jtag.sdk.feature.group"/>
+    <repository
+        url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
+    <repository
+        url="https://www.nittka.de/download/jtag"/>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:PreferenceTask"
+      id="jtag.perspective.default"
+      key="/instance/org.eclipse.ui/defaultPerspectiveId"
+      value="de.nittka.tooling.jtag.perspective">
+    <description>set the Jtag perspective as default perspective</description>
+  </setupTask>
+  <stream name="release"
+      label="Release">
+    <description>installs the latest released version</description>
+  </stream>
+  <description>
+    Xtext based image tagging&#xD;
+    Plugin for storing image meta date in text form and search it.
+  </description>
+</setup:Project>
