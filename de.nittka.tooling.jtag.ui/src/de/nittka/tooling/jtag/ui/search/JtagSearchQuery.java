@@ -1,7 +1,7 @@
 package de.nittka.tooling.jtag.ui.search;
 
 import java.io.File;
-import java.nio.file.Files;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,6 +26,8 @@ import org.eclipse.xtext.ui.editor.findrefs.ReferenceQuery;
 import org.eclipse.xtext.ui.editor.findrefs.ReferenceSearchResult;
 import org.eclipse.xtext.util.IAcceptor;
 import org.eclipse.xtext.xbase.lib.IteratorExtensions;
+
+import com.google.common.io.Files;
 
 import de.nittka.tooling.jtag.jtag.JtagPackage;
 import de.nittka.tooling.jtag.jtag.Search;
@@ -66,7 +68,7 @@ public class JtagSearchQuery extends ReferenceQuery {
 		try {
 			if(!result.getMatchingReferences().isEmpty()){
 				File tempFile= ResourcesPlugin.getWorkspace().getRoot().getLocation().append(".metadata").append("JtagSearchPreview.html").toFile();
-				Files.write(tempFile.toPath(), preview.createHtml(result).getBytes());
+				Files.write(preview.createHtml(result), tempFile, StandardCharsets.ISO_8859_1);
 				PlatformUI.getWorkbench().getBrowserSupport().createBrowser("JtagSearchPreview").openURL(tempFile.toURL());
 			}
 		} catch (Exception e) {
