@@ -28,12 +28,20 @@
       value="de.nittka.tooling.jtag.perspective">
     <description>set the Jtag perspective as default perspective</description>
   </setupTask>
+  <setupTask
+      xsi:type="setup:EclipseIniTask"
+      id="jtag.activate.perspective"
+      excludedTriggers="STARTUP MANUAL"
+      option="-perspective"
+      value="de.nittka.tooling.jtag.perspective">
+    <description>Opens Jtag perspective on first startup</description>
+  </setupTask>
   <stream name="release"
       label="Release">
     <description>installs the latest released version</description>
   </stream>
   <description>
-    Xtext based image tagging&#xD;
+    Xtext based image tagging
     Plugin for storing image meta date in text form and search it.
   </description>
 </setup:Project>
