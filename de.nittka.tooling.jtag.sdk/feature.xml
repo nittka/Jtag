@@ -2,20 +2,20 @@
 <feature
       id="de.nittka.tooling.jtag.sdk"
       label="Jtag SDK Feature "
-      version="1.0.1.qualifier">
+      version="1.0.2.qualifier">
 
    <plugin
          id="de.nittka.tooling.jtag"
          download-size="0"
          install-size="0"
-         version="1.0.1.qualifier"
+         version="1.0.2.qualifier"
          unpack="false"/>
 
    <plugin
          id="de.nittka.tooling.jtag.ui"
          download-size="0"
          install-size="0"
-         version="1.0.1.qualifier"
+         version="1.0.2.qualifier"
          unpack="false"/>
 
 </feature>
