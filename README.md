@@ -2,9 +2,9 @@
 
 ## Scope
 
-This is intended to be a lightweight Xtext based photo tagging system. Technologically it is an slightly adapted copy of [Xarchive](https://github.com/nittka/Xarchive). Within a single project you keep 
-* a definition file for _categories_
-* photos (clips etc.)
+Jtag intended to be a lightweight Xtext based photo tagging system. Technologically, it is a slightly adapted copy of [Xarchive](https://github.com/nittka/Xarchive). Within a single project you keep 
+* a definition file for _categories_ (one file in the project root)
+* folders with photos, clips etc. 
 * for each folder a `jtag` file containing meta data for photos within this folder (excluding subfolders)
 
 Supported meta data includes
@@ -55,6 +55,7 @@ categoriesFor occasion {
 ```
 //global information
 folder "Vacation 2017"
+//optional list of file patterns ignored when checking for missing entries
 ignore: "*.txt", "ignore.jpg"
 occasion: vacation;
 tags: Sweden
@@ -87,16 +88,16 @@ IMG_0274.jpg "departure".
   * document not found
   * missing metadata for a file within a folder
 * navigation using F3
-  * opening the original image
+  * opening the original file in an external editor
   * navigate to the category definition
 * find references `Shift-Ctrl-G`
   * where is the given category used (excluding short cuts or via category hierarchy)
 * user defined searches (invoked with `Alt-X` on the definition)
   * matches are shown in the search view
+  * resulting images are rendered in external web-browser
   * search referenced categories, tags, titles, descriptions
   * boolean operations
   * combine existing (named) searches
-  * resulting images are rendered in external web-browser
 * view showing the image currently selected in
   * navigator
   * editor
@@ -110,13 +111,14 @@ IMG_0274.jpg "departure".
 
 ## Limitations
 
+All files within must be contained one project.
 For simlicity file names, tags, categories etc. have a restricted character set (a-z, A-Z, digits, undersore and dash). File names containing other characters may be written as strings.
 
 ## Installation
 
 You need an Eclipse with an Xtext runtime (2.4. or later).
 The Jtag update site is [https://www.nittka.de/download/jtag](https://www.nittka.de/download/jtag).
-I might provide an Oomph setup file in the future.
+If you use the Eclipse installer (Oomph) you can use the following project setup URL: [https://raw.githubusercontent.com/nittka/Jtag/master/JtagUser.setup](https://raw.githubusercontent.com/nittka/Jtag/master/JtagUser.setup).
 
 metadata-extractor.jar is used under the The Apache Software License, Version 2.0, xmp-core under the BSD License [see](https://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html).
 Both are only used for extracting the date of a picture for the missing description quickfix.
