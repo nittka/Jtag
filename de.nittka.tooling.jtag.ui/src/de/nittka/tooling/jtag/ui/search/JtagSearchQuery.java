@@ -12,6 +12,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.search.ui.ISearchQuery;
+import org.eclipse.search.ui.NewSearchUI;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.resource.IContainer;
 import org.eclipse.xtext.resource.IContainer.Manager;
@@ -84,6 +90,11 @@ public class JtagSearchQuery extends ReferenceQuery {
 
 	private void internalRun(IProgressMonitor monitor, IAcceptor<IReferenceDescription> acceptor){
 		//our implementation searches the index, matching each visible IResourceDescription against the actual search logic
+		Resource resource = search.getResource();
+		if(resource==null){
+			showSearchNotPossibleInfo();
+			return;
+		}
 		IResourceDescriptions index = indexProvider.getResourceDescriptions(search.getResource());
 		Manager containerManager = serviceProvider.getContainerManager();
 		List<IContainer> visibleContainer = containerManager.getVisibleContainers(serviceProvider.getResourceDescriptionManager().getResourceDescription(search.getResource()), index);
@@ -107,6 +118,19 @@ public class JtagSearchQuery extends ReferenceQuery {
 				}
 			}
 		}
+	}
+
+	private void showSearchNotPossibleInfo(){
+		//cannot rerun search if definition file has changed.
+		final ISearchQuery query=this;
+		Display.getDefault().asyncExec(new Runnable(){
+
+			public void run() {
+				NewSearchUI.removeQuery(query);
+				Shell shell = PlatformUI.getWorkbench().getDisplay().getActiveShell();
+				MessageDialog.openInformation(shell, "Seach not possible", "The search cannot be executed again. The definition file has been modified.");
+			}
+		});
 	}
 
 	private List<IReferenceDescription> getReferences(IResourceDescription desc){
