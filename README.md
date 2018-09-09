@@ -2,7 +2,7 @@
 
 ## Scope
 
-Jtag intended to be a lightweight Xtext based photo tagging system. Technologically, it is a slightly adapted copy of [Xarchive](https://github.com/nittka/Xarchive). Within a single project you keep 
+Jtag is a lightweight Xtext based photo tagging system. Technologically, it is a slightly adapted copy of [Xarchive](https://github.com/nittka/Xarchive). Within a single project you keep 
 * a definition file for _categories_ (one file in the project root)
 * folders with photos, clips etc. 
 * for each folder a `jtag` file containing meta data for photos within this folder (excluding subfolders)
@@ -74,7 +74,7 @@ description "late arrival because we first drove to the wrong hotel, everyone ex
 IMG_0274.jpg "departure".
 ```
 
-# Features
+## Features
 
 * define your own category hierarchies for describing your photos
 * hover
@@ -122,3 +122,7 @@ If you use the Eclipse installer (Oomph) you can use the following project setup
 
 metadata-extractor.jar is used under the The Apache Software License, Version 2.0, xmp-core under the BSD License [see](https://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html).
 Both are only used for extracting the date of a picture for the missing description quickfix.
+
+## Documentation
+
+For more detailed information on installation, features etc. see the [project wiki](https://github.com/nittka/Jtag/wiki).
