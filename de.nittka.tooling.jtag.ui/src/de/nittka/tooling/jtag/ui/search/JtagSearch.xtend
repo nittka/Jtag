@@ -4,7 +4,6 @@ import com.google.common.base.Optional
 import de.nittka.tooling.jtag.jtag.AndSearchExpression
 import de.nittka.tooling.jtag.jtag.Category
 import de.nittka.tooling.jtag.jtag.CategorySearch
-import de.nittka.tooling.jtag.jtag.DescriptionSearch
 import de.nittka.tooling.jtag.jtag.JtagPackage
 import de.nittka.tooling.jtag.jtag.NegationSearchExpression
 import de.nittka.tooling.jtag.jtag.OrSearchExpression
@@ -12,7 +11,7 @@ import de.nittka.tooling.jtag.jtag.Search
 import de.nittka.tooling.jtag.jtag.SearchExpression
 import de.nittka.tooling.jtag.jtag.SearchReference
 import de.nittka.tooling.jtag.jtag.TagSearch
-import de.nittka.tooling.jtag.jtag.TitleSearch
+import de.nittka.tooling.jtag.jtag.TextSearch
 import java.util.ArrayList
 import java.util.Collections
 import java.util.List
@@ -82,12 +81,11 @@ class JtagSearch {
 		return tags.contains(exp.tag)
 	}
 
-	def private dispatch boolean internalApply(DescriptionSearch exp){
-		return userData("desc").contains(exp.description)
-	}
-
-	def private dispatch boolean internalApply(TitleSearch exp){
-		return userData("title").contains(exp.title)
+	def private dispatch boolean internalApply(TextSearch exp){
+		val searchString=exp.text.toLowerCase
+		return userData("desc").toLowerCase.contains(searchString)
+			|| userData("title").toLowerCase.contains(searchString)
+			|| desc.qualifiedName.toString.toLowerCase.contains(searchString)
 	}
 
 	def private dispatch boolean internalApply(CategorySearch exp){

@@ -44,8 +44,7 @@ AtomicSearchExpression returns SearchExpression:
 	ParenthesizedSearchExpression |
 	CategorySearch|
 	TagSearch|
-	DescriptionSearch|
-	TitleSearch
+	TextSearch
 ;
 
 
@@ -66,12 +65,8 @@ TagSearch returns SearchExpression:
 	"tag" {TagSearch} tag=ID
 ;
 
-DescriptionSearch returns SearchExpression:
-	"description" {DescriptionSearch} description=STRING
-;
-
-TitleSearch returns SearchExpression:
-	"title" {TitleSearch} title=STRING
+TextSearch returns SearchExpression:
+	"text" {TextSearch} text=STRING
 ;
 
 Folder:
