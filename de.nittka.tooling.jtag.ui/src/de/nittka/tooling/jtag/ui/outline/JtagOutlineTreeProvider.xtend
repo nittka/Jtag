@@ -11,6 +11,7 @@ import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider
 import org.eclipse.xtext.ui.editor.outline.impl.DocumentRootNode
 import javax.inject.Inject
 import org.eclipse.xtext.ui.IImageHelper
+import de.nittka.tooling.jtag.jtag.Category
 
 /**
  * Customization of the default outline structure.
@@ -32,6 +33,11 @@ class JtagOutlineTreeProvider extends DefaultOutlineTreeProvider {
 
 	def dispatch text(Search search){
 		if(search.id!=null) search.id else "unnamed search"
+	}
+
+	def dispatch text(Category cat){
+		val desc=cat.description
+		return if(desc!==null)'''«cat.name» («desc»)'''else cat.name
 	}
 
 	def dispatch createChildren(IOutlineNode parent, JtagConfig config){
