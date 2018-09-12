@@ -4,12 +4,12 @@
 package de.nittka.tooling.jtag.validation
 
 import de.nittka.tooling.jtag.jtag.Category
-import de.nittka.tooling.jtag.jtag.CategoryRef
 import de.nittka.tooling.jtag.jtag.CategoryType
 import de.nittka.tooling.jtag.jtag.File
 import de.nittka.tooling.jtag.jtag.JtagConfig
 import de.nittka.tooling.jtag.jtag.JtagPackage
 import java.util.List
+import java.util.Map
 import java.util.Set
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -38,15 +38,43 @@ class JtagValidator extends AbstractJtagValidator {
 	private IResourceServiceProvider serviceProvider
 
 	@Check
-	def checkDuplicateCategory(File doc) {
+	def checkDuplicateCategoryType(File doc) {
 		val Set<CategoryType> types=newHashSet()
 		doc.categories.forEach[
 			val t=it.type
 			if (types.contains(t)){
-				error("duplicate category", it, JtagPackage.Literals.CATEGORY_REF__TYPE)
+				error("duplicate category type", it, JtagPackage.Literals.CATEGORY_REF__TYPE)
 			}else{
 				types.add(t)
 			}
+		]
+	}
+
+	@Check
+	def checkDuplicateCategoryInType(CategoryType type) {
+		val Set<String> names=newHashSet()
+		type.category.map[allCategories].flatten.toSet.forEach[
+			if (names.contains(name)){
+				error("duplicate category within "+type.name, it, JtagPackage.Literals.CATEGORY__NAME)
+			}else{
+				names.add(name)
+			}
+		]
+	}
+
+	@Check
+	def checkDuplicateCategoryBetweenTypes(JtagConfig config) {
+		val Map<String, Set<String>> allNames=newHashMap
+		config.types.forEach[
+			allNames.put(it.name, category.map[allCategories].flatten.map[name].toSet)
+		]
+		config.types.forEach[
+			val otherTypesNames=allNames.filter[k,v|k!=name].values.flatten.toSet
+			category.map[allCategories].flatten.toSet.forEach[
+				if(otherTypesNames.contains(name)){
+					warning("same category name in other category type", it, JtagPackage.Literals.CATEGORY__NAME)
+				}
+			]
 		]
 	}
 
@@ -58,24 +86,6 @@ class JtagValidator extends AbstractJtagValidator {
 			if(!datePattern.matcher(doc.date).matches){
 				error("illegal date format (yyyy-mm-dd)", JtagPackage.Literals.FILE__DATE)
 			}
-		}
-	}
-
-	def void checkCategory(CategoryRef ref, Set<Category> usedCategories){
-		if(ref.categories.empty){
-			error("at least one category must be defined", ref, JtagPackage.Literals.CATEGORY_REF__TYPE)
-		}else{
-			(0..ref.categories.size-1).forEach[index|
-				val cat=ref.categories.get(index)
-				val catToCheck=newHashSet(cat)
-				catToCheck.forEach[toCheck|
-					if(usedCategories.contains(toCheck)){
-						error("duplicate category "+toCheck.name, ref, JtagPackage.Literals.CATEGORY_REF__CATEGORIES, index)
-					}else{
-						usedCategories.addAll(toCheck.allCategories)
-					}
-				]
-			]
 		}
 	}
 
