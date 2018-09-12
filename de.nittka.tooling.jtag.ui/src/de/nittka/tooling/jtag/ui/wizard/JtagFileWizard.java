@@ -38,6 +38,9 @@ public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements o
 	private WizardPage mainPage;
 	private String currentValidFileName;
 
+	protected String mainPageTitle="creates a jtag file for the selected folder";
+	protected String initialFileContent="folder \"short description of folder content\"";
+
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		//enablement in plugin.xml ensures single container selection
 		this.folder= (IContainer)selection.getFirstElement();
@@ -50,7 +53,7 @@ public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements o
 	public void addPages() {
 		super.addPages();
 		mainPage = new WizardPage("createJtagFilePage", 
-				"creates a jtag file for the selected folder", null) {
+				mainPageTitle, null) {
 
 			public void createControl(Composite parent) {
 				addPageControls(parent);
@@ -87,14 +90,19 @@ public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements o
 		nameField.setLayoutData(data);
 		nameField.setFont(font);
 
-		String proposedJtagName = folder.getName().replace('.', '_').replaceAll("\\s", "_");
+		String proposedJtagName=getProposedFileName(folder);
 		nameField.setText(proposedJtagName+".jtag");
 		nameField.setSelection(0, proposedJtagName.length());
 
 		addExistingJtagFileHint(nameGroup);
 	}
 
-	private void addExistingJtagFileHint(Composite parent){
+	protected String getProposedFileName(IContainer folder){
+		String proposedJtagName = folder.getName().replace('.', '_').replaceAll("\\s", "_");
+		return proposedJtagName;
+	}
+
+	protected void addExistingJtagFileHint(Composite parent){
 		if(folder instanceof IFolder){
 			try {
 				for (IResource r : folder.members()) {
@@ -147,7 +155,7 @@ public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements o
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					IFile newFile = folder.getFile(new Path(currentValidFileName));
 					try {
-						newFile.create(new StringInputStream("folder \"short description of folder content\""), true, monitor);
+						newFile.create(new StringInputStream(initialFileContent), true, monitor);
 						fileOpener.openFileToEdit(getShell(), newFile);
 						monitor.done();
 					} catch (CoreException e) {
