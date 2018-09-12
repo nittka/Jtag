@@ -3,16 +3,18 @@
 */
 package de.nittka.tooling.jtag.ui.labeling
 
-import com.google.inject.Inject
 import de.nittka.tooling.jtag.jtag.Category
+import de.nittka.tooling.jtag.jtag.CategoryType
 import de.nittka.tooling.jtag.jtag.File
 import de.nittka.tooling.jtag.jtag.Folder
 import de.nittka.tooling.jtag.jtag.JtagConfig
+import de.nittka.tooling.jtag.jtag.JtagSearches
 import de.nittka.tooling.jtag.jtag.Search
+import de.nittka.tooling.jtag.ui.JtagFileURIs
+import javax.inject.Inject
+import org.eclipse.core.runtime.Path
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider
 import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider
-import de.nittka.tooling.jtag.jtag.CategoryType
-import de.nittka.tooling.jtag.jtag.JtagSearches
 
 /**
  * Provides labels for a EObjects.
@@ -20,6 +22,7 @@ import de.nittka.tooling.jtag.jtag.JtagSearches
  * see http://www.eclipse.org/Xtext/documentation.html#labelProvider
  */
 class JtagLabelProvider extends DefaultEObjectLabelProvider {
+
 
 	@Inject
 	new(AdapterFactoryLabelProvider delegate) {
@@ -52,7 +55,18 @@ class JtagLabelProvider extends DefaultEObjectLabelProvider {
 	}
 
 	def image(File f){
-		return "jtagfile.gif";
+		return getJtagFileIcon(f.fileName.fileName)
+	}
+
+	def static getJtagFileIcon(String fileName){
+			val fileExt=new Path(fileName.toString).fileExtension
+		if(JtagFileURIs.isImageExtension(fileExt)){
+			return "jtagfile.gif"
+		} else if(JtagFileURIs.isMovieExtension(fileExt)){
+			return "movie.gif"
+		} else{
+			return "unknown_file.gif"
+		}
 	}
 
 	def image(JtagSearches s){

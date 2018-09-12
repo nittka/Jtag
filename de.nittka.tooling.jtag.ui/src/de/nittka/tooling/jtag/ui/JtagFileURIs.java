@@ -15,10 +15,15 @@ import de.nittka.tooling.jtag.jtag.FileName;
 public class JtagFileURIs {
 
 	//tif, tiff works for image preview but not for html rendering
-	private static List<String> SUPPORTED_EXTENSION=ImmutableList.of("jpg","jpeg","jpe","gif","png","bmp");
+	private static List<String> SUPPORTED_IMAGE_EXTENSION=ImmutableList.of("jpg","jpeg","jpe","gif","png","bmp");
+	private static List<String> KNOWN_MOVIE_EXTENSION=ImmutableList.of("avi","mov","mpg","mpeg","mp4","wmv","divx");
 
-	private static boolean isImageExtension(String fileExtension){
-		return fileExtension!=null && SUPPORTED_EXTENSION.contains(fileExtension.toLowerCase());
+	public static boolean isImageExtension(String fileExtension){
+		return fileExtension!=null && SUPPORTED_IMAGE_EXTENSION.contains(fileExtension.toLowerCase());
+	}
+
+	public static boolean isMovieExtension(String fileExtension){
+		return fileExtension!=null && KNOWN_MOVIE_EXTENSION.contains(fileExtension.toLowerCase());
 	}
 
 	public static URI getReferencedResourceURI(FileName file){

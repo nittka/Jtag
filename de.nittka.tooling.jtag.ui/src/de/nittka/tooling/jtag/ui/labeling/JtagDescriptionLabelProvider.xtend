@@ -3,11 +3,11 @@
 */
 package de.nittka.tooling.jtag.ui.labeling
 
-import org.eclipse.xtext.resource.IEObjectDescription
-import org.eclipse.xtext.ui.label.DefaultDescriptionLabelProvider
 import de.nittka.tooling.jtag.jtag.JtagPackage
-import org.eclipse.xtext.resource.IResourceDescription
+import org.eclipse.xtext.resource.IEObjectDescription
 import org.eclipse.xtext.resource.IReferenceDescription
+import org.eclipse.xtext.resource.IResourceDescription
+import org.eclipse.xtext.ui.label.DefaultDescriptionLabelProvider
 
 //import org.eclipse.xtext.resource.IEObjectDescription
 
@@ -33,7 +33,7 @@ class JtagDescriptionLabelProvider extends DefaultDescriptionLabelProvider {
 	override image(IEObjectDescription ele) {
 		val clazz = ele.EClass
 		switch clazz{
-			case JtagPackage.eINSTANCE.file: return "jtagfile.gif"
+			case JtagPackage.eINSTANCE.file: return JtagLabelProvider.getJtagFileIcon(ele.qualifiedName.toString)
 			case JtagPackage.eINSTANCE.jtagConfig: return "categorytype.gif"
 			case JtagPackage.eINSTANCE.search: return "search.png"
 		} 
