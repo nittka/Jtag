@@ -158,8 +158,10 @@ public class JTagImageView extends ViewPart implements ISelectionListener, IPart
 					EObject objectNode = state.getEObject(outlineNode.getEObjectURI().fragment());
 					if(objectNode instanceof File){
 						String imageLocation = JtagFileURIs.getImageLocation((File)objectNode);
-						showFile(imageLocation, false);
-						previewShown.set(true);
+						if(imageLocation!=null){
+							showFile(imageLocation, false);
+							previewShown.set(true);
+						}
 					}
 					return null;
 				}

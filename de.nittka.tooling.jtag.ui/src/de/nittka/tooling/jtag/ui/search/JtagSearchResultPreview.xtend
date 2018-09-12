@@ -54,6 +54,11 @@ class JtagSearchResultPreview {
 					  <img src="file://«location»" title="«javaFile.name»  -  «javaFile.parentFile.absolutePath»">
 					 </div>
 				'''
+			}else {
+				val path=JtagFileURIs.getFilePath(file);
+				if(path!==null){
+					'''<a href="file://«path»" title="«path»">«file.fileName.fileName»</a>'''
+				}
 			}
 		}
 	}
