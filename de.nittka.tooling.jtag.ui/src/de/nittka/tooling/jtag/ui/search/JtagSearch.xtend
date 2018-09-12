@@ -89,7 +89,6 @@ class JtagSearch {
 	}
 
 	def private dispatch boolean internalApply(CategorySearch exp){
-		//TODO handle shortcut categories properly - after considering what the search semantics should be
 		val referencedCategories=refs
 		.filter[refFromCurrentDesc]
 		.map[targetEObjectUri].toList
@@ -107,18 +106,19 @@ class JtagSearch {
 	def private List<URI> getUrisToLookFor(CategorySearch exp){
 		val categoriesToLookFor=new ArrayList<URI>
 		val category = exp.category.category
-		val baseURI = getResource.getURI();
+		val defResource=category.eResource
+		val baseURI = defResource.getURI()
 
-		categoriesToLookFor.add(baseURI.appendFragment(getResource.getURIFragment(category)))
+		categoriesToLookFor.add(baseURI.appendFragment(defResource.getURIFragment(category)))
 		if (exp.orBelow){
 			EcoreUtil2.getAllContentsOfType(category, Category).forEach[
-				categoriesToLookFor.add(baseURI.appendFragment(getResource.getURIFragment(it)))
+				categoriesToLookFor.add(baseURI.appendFragment(defResource.getURIFragment(it)))
 			]
 		}
 		if (exp.orAbove){
 			var EObject parent=category.eContainer
 			while(parent instanceof Category){
-				categoriesToLookFor.add(baseURI.appendFragment(getResource.getURIFragment(parent)))
+				categoriesToLookFor.add(baseURI.appendFragment(defResource.getURIFragment(parent)))
 				parent=parent.eContainer
 			}
 		}
