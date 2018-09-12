@@ -65,6 +65,9 @@ class JtagFormatter extends AbstractDeclarativeFormatter {
 		c.setIndentationIncrement.before(searchAccess.searchAssignment_2)
 		c.setIndentationDecrement.after(searchAccess.searchAssignment_2)
 		c.setLinewrap(1).before(searchAccess.searchAssignment_2)
+		c.setIndentationIncrement.before(searchAccess.ignoreKeyword_3_0_0)
+		c.setLinewrap(1).before(searchAccess.ignoreKeyword_3_0_0)
+		c.setIndentationDecrement.after(searchAccess.ignoreKeyword_3_0_0)
 
 		c.setIndentationIncrement.before(andSearchExpressionAccess.ampersandAmpersandKeyword_1_1)
 		c.setIndentationDecrement.after(andSearchExpressionAccess.ampersandAmpersandKeyword_1_1)

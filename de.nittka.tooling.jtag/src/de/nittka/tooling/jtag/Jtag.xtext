@@ -26,6 +26,7 @@ Category: name=ID (description=STRING)?
 Search:
 	"search" ("named" name=ID)?
 	search=SearchExpression
+	(("ignore" ignore+=STRING)("," ignore+=STRING)*)?
 ;
 
 SearchExpression returns SearchExpression:

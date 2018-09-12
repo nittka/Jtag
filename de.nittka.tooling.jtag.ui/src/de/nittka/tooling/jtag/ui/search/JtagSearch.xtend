@@ -45,7 +45,27 @@ class JtagSearch {
 		this.desc=description
 		this.monitor=monitor
 		this.refs=references;
-		return apply(search.search)
+		if(description.matchesIgnorePattern){
+			return false
+		}else{
+			return apply(search.search)
+		}
+	}
+
+	def private boolean matchesIgnorePattern(IEObjectDescription desc){
+		if(!search.ignore.empty){
+			//URI of the image file
+			val uri=desc.EObjectURI.trimFragment.trimSegments(1).appendSegment(desc.qualifiedName.toString)
+			if(search.ignore.exists[pattern|uri.matchesIgnorePattern(pattern)]){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	def private boolean matchesIgnorePattern(URI uri, String pattern){
+		//first simple approximation of match - no wildcards etc.
+		return uri.toString.contains(pattern)
 	}
 
 	def private boolean apply(SearchExpression expression){

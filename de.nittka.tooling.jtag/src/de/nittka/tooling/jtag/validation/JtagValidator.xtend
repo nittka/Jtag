@@ -19,6 +19,7 @@ import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.CheckType
+import de.nittka.tooling.jtag.jtag.Search
 
 //import org.eclipse.xtext.validation.Check
 
@@ -116,6 +117,13 @@ class JtagValidator extends AbstractJtagValidator {
 		]
 		if(configs.size>1){
 			error("there is more than one archive configuration file:"+configs.map[name.toString].join(", "), JtagPackage.Literals.JTAG_CONFIG__TYPES)
+		}
+	}
+
+	@Check(CheckType.NORMAL)
+	def checkNamedSearchWithIgnore(Search search) {
+		if(search.name!==null && !search.ignore.empty){
+			warning("ignore patters will not be considered when reusing the search, they will only be applied when executing this named search directly", JtagPackage.Literals.SEARCH__NAME)
 		}
 	}
 }
