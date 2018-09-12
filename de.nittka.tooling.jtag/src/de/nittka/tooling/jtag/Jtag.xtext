@@ -21,8 +21,6 @@ CategoryType: "categoriesFor" name=ID (description=STRING)? "{"
 Category: name=ID (description=STRING)? 
 	(
 		("{"category+=Category (","category+=Category)*"}")
-		|
-		("shortcutFor" "(" shortCuts+=ShortCut ("," shortCuts+=ShortCut)*")")
 	)?;
 
 Search:

@@ -68,7 +68,6 @@ class JtagValidator extends AbstractJtagValidator {
 			(0..ref.categories.size-1).forEach[index|
 				val cat=ref.categories.get(index)
 				val catToCheck=newHashSet(cat)
-				catToCheck.addAll(cat.shortCuts.map[category])
 				catToCheck.forEach[toCheck|
 					if(usedCategories.contains(toCheck)){
 						error("duplicate category "+toCheck.name, ref, JtagPackage.Literals.CATEGORY_REF__CATEGORIES, index)

@@ -55,18 +55,13 @@ class JtagFormatter extends AbstractDeclarativeFormatter {
 		c.setIndentationIncrement.after(categoryTypeAccess.leftCurlyBracketKeyword_3)
 		c.setIndentationDecrement.before(categoryTypeAccess.rightCurlyBracketKeyword_6)
 
-		c.setLinewrap(1).around(categoryAccess.categoryAssignment_2_0_1)
-		c.setLinewrap(1).around(categoryAccess.categoryAssignment_2_0_2_1)
-		c.setIndentationIncrement.after(categoryAccess.leftCurlyBracketKeyword_2_0_0)
-		c.setIndentationDecrement.before(categoryAccess.rightCurlyBracketKeyword_2_0_3)
-
-		c.setLinewrap(1).around(categoryAccess.shortCutsAssignment_2_1_2)
-		c.setLinewrap(1).around(categoryAccess.shortCutsAssignment_2_1_3_1)
-		c.setIndentationIncrement.after(categoryAccess.leftParenthesisKeyword_2_1_1)
-		c.setIndentationDecrement.before(categoryAccess.rightParenthesisKeyword_2_1_4)
+		c.setLinewrap(1).around(categoryAccess.categoryAssignment_2_1)
+		c.setIndentationIncrement.after(categoryAccess.leftCurlyBracketKeyword_2_0)
+		c.setIndentationDecrement.before(categoryAccess.rightCurlyBracketKeyword_2_3)
+		c.setLinewrap(1).around(categoryAccess.categoryAssignment_2_2_1)
 
 		//search
-		c.setLinewrap(2).before(searchAccess.searchKeyword_0)
+		c.setLinewrap(2).between(jtagSearchesAccess.searchesAssignment, jtagSearchesAccess.searchesAssignment)
 		c.setIndentationIncrement.before(searchAccess.searchAssignment_2)
 		c.setIndentationDecrement.after(searchAccess.searchAssignment_2)
 		c.setLinewrap(1).before(searchAccess.searchAssignment_2)

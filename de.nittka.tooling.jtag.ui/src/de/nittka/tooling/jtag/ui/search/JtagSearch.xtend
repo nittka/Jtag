@@ -110,18 +110,16 @@ class JtagSearch {
 		val baseURI = getResource.getURI();
 
 		categoriesToLookFor.add(baseURI.appendFragment(getResource.getURIFragment(category)))
-		if(category.shortCuts.empty){
-			if (exp.orBelow){
-				EcoreUtil2.getAllContentsOfType(category, Category).forEach[
-					categoriesToLookFor.add(baseURI.appendFragment(getResource.getURIFragment(it)))
-				]
-			}
-			if (exp.orAbove){
-				var EObject parent=category.eContainer
-				while(parent instanceof Category){
-					categoriesToLookFor.add(baseURI.appendFragment(getResource.getURIFragment(parent)))
-					parent=parent.eContainer
-				}
+		if (exp.orBelow){
+			EcoreUtil2.getAllContentsOfType(category, Category).forEach[
+				categoriesToLookFor.add(baseURI.appendFragment(getResource.getURIFragment(it)))
+			]
+		}
+		if (exp.orAbove){
+			var EObject parent=category.eContainer
+			while(parent instanceof Category){
+				categoriesToLookFor.add(baseURI.appendFragment(getResource.getURIFragment(parent)))
+				parent=parent.eContainer
 			}
 		}
 		return categoriesToLookFor
