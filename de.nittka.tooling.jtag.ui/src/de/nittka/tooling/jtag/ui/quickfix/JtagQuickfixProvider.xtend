@@ -46,8 +46,7 @@ class JtagQuickfixProvider extends DefaultQuickfixProvider {
 				val factory =JtagFactory.eINSTANCE
 				val newEntry=factory.createFile
 				newEntry.setFileName(factory.createFileName)
-				newEntry.fileName.setFileName(target.fullPath.removeFileExtension.lastSegment)
-				newEntry.fileName.setExtension(target.fileExtension)
+				newEntry.fileName.setFileName(maybeEscape(target.fullPath.lastSegment))
 				newEntry.setDate(getDate(target))
 				newEntry.tags.add("quickfix")
 				entriesToAdd.add(newEntry)
@@ -55,6 +54,19 @@ class JtagQuickfixProvider extends DefaultQuickfixProvider {
 			val folder=obj as Folder
 			folder.files.addAll(entriesToAdd)
 		]
+	}
+
+	def String maybeEscape(String fileName){
+		//rough approximation of the FileNameWithExtension rule
+		//if the name matches - no escaping necessary 
+		val char dot='.'
+		if(fileName.matches("[a-zA-Z0-9._-]*")){
+			val int firstDotIndex=fileName.indexOf(dot)
+			if(firstDotIndex<=0 || fileName.substring(firstDotIndex+1).indexOf(dot) <=0){
+				return fileName;
+			}
+		}
+		return '''"«fileName»"'''
 	}
 
 	def private String getDate(IFile f){

@@ -12,7 +12,7 @@ public class JtagFileURIs {
 
 	public static URI getReferencedResourceURI(FileName file){
 		try{
-			return file.eResource().getURI().trimSegments(1).appendSegment(file.getFileName()).appendFileExtension(file.getExtension());
+			return file.eResource().getURI().trimSegments(1).appendSegment(file.getFileName());
 		}catch(Exception e){
 			//partial name cannot reference existing file
 			return null;
@@ -24,18 +24,9 @@ public class JtagFileURIs {
 		if(wsFile.exists()){
 			FileName name = file.getFileName();
 			IPath folder = wsFile.getLocation().removeLastSegments(1);
-			IPath fileLocation = folder.append(name.getFileName()).addFileExtension(name.getExtension());
+			IPath fileLocation = folder.append(name.getFileName());
 			return fileLocation.toString();
 		}
 		return null;
 	}
-
-//	public static IFile getJtagFile(IFile file){
-//		if("jtag".equals(file.getFileExtension())){
-//			throw new IllegalArgumentException(file+" is already an Jtag file");
-//		}
-//		IPath path = file.getFullPath().removeFileExtension().addFileExtension("jtag");
-//		IFile xarchiveFile=file.getParent().getFile(new Path(path.lastSegment()));
-//		return xarchiveFile;
-//	}
 }

@@ -90,11 +90,12 @@ File:
 	"."
 ;
 
-FileName hidden(): fileName=(ID|STRING) '.' extension=ID;
+FileName: fileName=(FileNameWithExtension|STRING);
 
 CategoryRef: type=[CategoryType] ":" (categories+=[Category] ("," categories+=[Category])*)";";
 ShortCut: type=[CategoryType]":" category=[Category];
 
+FileNameWithExtension hidden(): ID'.'ID;
 Date hidden():INT"-"INT"-"INT;
 terminal ID: ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'-'|'0'..'9')*;
 

@@ -34,7 +34,7 @@ class JtagUIValidator extends JtagValidator {
 	@Check(CheckType.NORMAL)
 	def checkAllFilesHaveDescription(Folder folder) {
 		val file=ws.root.getFile(new Path(folder.eResource.getURI.toPlatformString(true)))
-		val existingJtag=folder.files.map[fileName.fileName+"."+fileName.extension]
+		val existingJtag=folder.files.map[fileName.fileName]
 		val folderIgnores=folder.ignore.map[p|p.replaceAll("\\.","\\\\.").replaceAll("\\*","\\.*")]
 		if(file.exists){
 			val List<String> missingFiles=newArrayList
