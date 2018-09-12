@@ -60,7 +60,7 @@ public class JtagSearchHandler extends AbstractHandler {
 	//the essential parts from ReferenceQueryExecutor
 	public void execute(Search search) {
 		JtagSearchQuery query=queryProvider.get();
-		String searchName=search.getId()!=null?search.getId():"unnamed Xarchive search";
+		String searchName=search.getName()!=null?search.getName():"unnamed Xarchive search";
 		//dummy initialization of ReferenceQuery
 		query.init(null, Predicates.<IReferenceDescription>alwaysTrue(), searchName);
 		//the essential initialization of XarchiveSearchQuery (the actual search context)

@@ -12,6 +12,7 @@ import de.nittka.tooling.jtag.jtag.Search
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider
 import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider
 import de.nittka.tooling.jtag.jtag.CategoryType
+import de.nittka.tooling.jtag.jtag.JtagSearches
 
 /**
  * Provides labels for a EObjects.
@@ -52,6 +53,10 @@ class JtagLabelProvider extends DefaultEObjectLabelProvider {
 
 	def image(File f){
 		return "jtagfile.gif";
+	}
+
+	def image(JtagSearches s){
+		return "searches.png"
 	}
 
 	def image(Search s){

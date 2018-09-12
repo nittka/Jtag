@@ -3,13 +3,17 @@ grammar de.nittka.tooling.jtag.Jtag with org.eclipse.xtext.common.Terminals
 generate jtag "http://www.nittka.de/tooling/jtag/Jtag"
 
 Model:
-	JtagConfig|Folder;
+	JtagConfig|JtagSearches|Folder;
 
 JtagConfig: 
-	{JtagConfig}
-	types+=CategoryType*
-	searches+=Search*
+	({JtagConfig}) |
+	(types+=CategoryType+)
 ;
+
+JtagSearches:
+	searches+=Search+
+;
+
 CategoryType: "categoriesFor" name=ID (description=STRING)? "{"
 	category+=Category (","category+=Category)*
 	"}"
@@ -22,7 +26,7 @@ Category: name=ID (description=STRING)?
 	)?;
 
 Search:
-	"search" ("named" id=ID)?
+	"search" ("named" name=ID)?
 	search=SearchExpression
 ;
 

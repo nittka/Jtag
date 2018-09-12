@@ -3,15 +3,10 @@
 */
 package de.nittka.tooling.jtag.ui.outline
 
-import de.nittka.tooling.jtag.jtag.File
-import de.nittka.tooling.jtag.jtag.JtagConfig
-import de.nittka.tooling.jtag.jtag.Search
-import org.eclipse.xtext.ui.editor.outline.IOutlineNode
-import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider
-import org.eclipse.xtext.ui.editor.outline.impl.DocumentRootNode
-import javax.inject.Inject
-import org.eclipse.xtext.ui.IImageHelper
 import de.nittka.tooling.jtag.jtag.Category
+import de.nittka.tooling.jtag.jtag.File
+import de.nittka.tooling.jtag.jtag.Search
+import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider
 
 /**
  * Customization of the default outline structure.
@@ -19,9 +14,6 @@ import de.nittka.tooling.jtag.jtag.Category
  * see http://www.eclipse.org/Xtext/documentation.html#outline
  */
 class JtagOutlineTreeProvider extends DefaultOutlineTreeProvider {
-
-	@Inject
-	IImageHelper imageHelper;
 
 	def dispatch isLeaf(File file){
 		true;
@@ -32,7 +24,7 @@ class JtagOutlineTreeProvider extends DefaultOutlineTreeProvider {
 	}
 
 	def dispatch text(Search search){
-		if(search.id!=null) search.id else "unnamed search"
+		if(search.name!=null) search.name else "unnamed search"
 	}
 
 	def dispatch text(Category cat){
@@ -40,22 +32,4 @@ class JtagOutlineTreeProvider extends DefaultOutlineTreeProvider {
 		return if(desc!==null)'''«cat.name» («desc»)'''else cat.name
 	}
 
-	def dispatch createChildren(IOutlineNode parent, JtagConfig config){
-		if(parent.text=="searches"){
-			for(search:config.searches){
-				createNode(parent, search)
-			}
-		} else {
-			for(type:config.types){
-				createNode(parent, type)
-			}
-		}
-	}
-
-	def dispatch createChildren(DocumentRootNode parentNode, JtagConfig config) {
-		super._createChildren(parentNode, config)
-		if(!config.searches.empty){
-			createEObjectNode(parentNode, config, imageHelper.getImage("searches.png"), "searches", false)
-		}
-	}
 }
