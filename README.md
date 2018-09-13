@@ -2,13 +2,15 @@
 
 ## Scope
 
-Jtag is a lightweight Xtext based photo tagging system. Technologically, it is a slightly adapted copy of [Xarchive](https://github.com/nittka/Xarchive). Within a single project you keep 
+Jtag is a lightweight Xtext based photo tagging system. Technologically, it is an adapted copy of [Xarchive](https://github.com/nittka/Xarchive).
+Within a single project you keep
 * a definition file for _categories_ (one file in the project root)
 * folders with photos, clips etc. 
 * for each folder a `jtag` file containing meta data for photos within this folder (excluding subfolders)
+* one or more files with searches
 
 Supported meta data includes
-* global information (folder name, file name patterns to ignore, categories and tags that apply to all files within the folder)
+* global information (folder name, categories and tags that apply to all files within the folder)
 * file name
 * title
 * date
@@ -41,10 +43,6 @@ categoriesFor person {
   }
 }
 
-categoriesFor place {
-  home, away
-}
-
 categoriesFor occasion {
   birthday, vacation
 }
@@ -61,12 +59,13 @@ occasion: vacation;
 tags: Sweden
 
 // start single files
-//file name, optional date and optional title
+//file name, date and short title
 IMG_0011.jpg 2017-02-11 "arrival in Stockholm"
 //categories
 persons: mom, children;
 //tags
 tags: Stockholm, hotel, rain
+//longer description
 description "late arrival because we first drove to the wrong hotel, everyone exhausted"
 .
 
@@ -74,28 +73,41 @@ description "late arrival because we first drove to the wrong hotel, everyone ex
 IMG_0274.jpg "departure".
 ```
 
+### search file
+
+```
+//search in file name, title and description
+search text "arrival" 
+
+//combine search criteria
+search category persons:son && date from 2016-?-? to 2017-06-?
+```
+
 ## Features
 
 * define your own category hierarchies for describing your photos
 * hover
-  * on category shows descriptions (if you provided them)
-  * on file name shows image thumbnail
+  * on category shows descriptions (if provided)
+  * on image file name shows thumbnail
 * content assist
   * keywords
   * categories
   * (already used) tags
+  * files to ignore
 * validation (+ quickfixes for some)
   * document not found
   * missing metadata for a file within a folder
+  * duplicate names
+  * date search patterns
 * navigation using F3
   * opening the original file in an external editor
   * navigate to the category definition
 * find references `Shift-Ctrl-G`
-  * where is the given category used (excluding short cuts or via category hierarchy)
-* user defined searches (invoked with `Alt-X` on the definition)
+  * where is the given category used (excluding via category hierarchy)
+* user defined searches (invoked with `Alt-X` on the search definition)
+  * search categories, tags, text, dates
   * matches are shown in the search view
-  * resulting images are rendered in external web-browser
-  * search referenced categories, tags, titles, descriptions
+  * resulting images can be rendered in an external web-browser (if GPS data and internet connection are present also on a map)
   * boolean operations
   * combine existing (named) searches
 * view showing the image currently selected in
@@ -108,20 +120,22 @@ IMG_0274.jpg "departure".
   * navigator with quick access to new jtag file wizard
   * optional navigator filter (show only jtag files)
   * navigator sorting (jtag file before any other files)
+  * show selected images on a map (if GPS data is present)
 
 ## Limitations
 
-All files within must be contained one project.
-For simlicity file names, tags, categories etc. have a restricted character set (a-z, A-Z, digits, undersore and dash). File names containing other characters may be written as strings.
+All files within must be contained in one project.
+For simlicity file names, tags, categories etc. have a restricted character set (a-z, A-Z, digits, undersore and dash).
+File names containing other characters may be written in double quotes.
 
 ## Installation
 
 You need an Eclipse with an Xtext runtime (2.4. or later).
-The Jtag update site is [https://www.nittka.de/download/jtag](https://www.nittka.de/download/jtag).
 If you use the Eclipse installer (Oomph) you can use the following project setup URL: [https://raw.githubusercontent.com/nittka/Jtag/master/JtagUser.setup](https://raw.githubusercontent.com/nittka/Jtag/master/JtagUser.setup).
+The Jtag update site is [https://www.nittka.de/download/jtag](https://www.nittka.de/download/jtag).
 
 metadata-extractor.jar is used under the The Apache Software License, Version 2.0, xmp-core under the BSD License [see](https://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html).
-Both are only used for extracting the date of a picture for the missing description quickfix.
+Both are only used for extracting the date of a picture for the missing description quickfix and for extracting GPS data.
 
 ## Documentation
 
