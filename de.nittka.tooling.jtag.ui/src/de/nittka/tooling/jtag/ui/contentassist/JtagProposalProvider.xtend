@@ -3,12 +3,16 @@
  */
 package de.nittka.tooling.jtag.ui.contentassist
 
+import de.nittka.tooling.jtag.jtag.Folder
 import de.nittka.tooling.jtag.ui.search.JtagTagCounter
+import de.nittka.tooling.jtag.ui.validation.JtagUIValidator
 import javax.inject.Inject
+import org.eclipse.core.resources.IWorkspace
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.Assignment
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor
+import org.eclipse.core.runtime.Path
 
 /**
  * see http://www.eclipse.org/Xtext/documentation.html#contentAssist on how to customize content assistant
@@ -17,7 +21,8 @@ class JtagProposalProvider extends AbstractJtagProposalProvider {
 
 	@Inject
 	var JtagTagCounter tagCounter;
-
+	@Inject
+	IWorkspace workspace
 
 	override completeFile_Tags(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		val tags=tagCounter.getTags(model.eResource)
@@ -27,5 +32,12 @@ class JtagProposalProvider extends AbstractJtagProposalProvider {
 	override completeTagSearch_Tag(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		val tags=tagCounter.getTags(model.eResource)
 		tags.forEach[acceptor.accept(createCompletionProposal(context))]
+	}
+
+	def completeFolder_Ignore(Folder model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		val undefinedFiles=JtagUIValidator.getFilesWithoutDefinition(model, workspace)
+		undefinedFiles.forEach[acceptor.accept(createCompletionProposal('''"«it»"''', context))]
+		val fileExtensions=undefinedFiles.map[new Path(it).fileExtension].toSet
+		fileExtensions.forEach[acceptor.accept(createCompletionProposal('''"*.«it»"''', null, null, 350,context.prefix, context))]
 	}
 }

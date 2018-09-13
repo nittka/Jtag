@@ -31,13 +31,12 @@ class JtagUIValidator extends JtagValidator {
 		}
 	}
 
-	@Check(CheckType.NORMAL)
-	def checkAllFilesHaveDescription(Folder folder) {
-		val file=ws.root.getFile(new Path(folder.eResource.getURI.toPlatformString(true)))
+	def static List<String> getFilesWithoutDefinition(Folder folder, IWorkspace workspace){
+		val file=workspace.root.getFile(new Path(folder.eResource.getURI.toPlatformString(true)))
 		val existingJtag=folder.files.map[fileName.fileName]
-		val folderIgnores=folder.ignore.map[p|p.replaceAll("\\.","\\\\.").replaceAll("\\*","\\.*")]
+		val folderIgnores=folder.ignore.map[p|p.replaceAll("\\.","\\\\.").replaceAll("\\*","\\.*").replaceAll("\\(","\\\\(").replaceAll("\\)","\\\\)")]
+		val List<String> missingFiles=newArrayList
 		if(file.exists){
-			val List<String> missingFiles=newArrayList
 			val container=file.parent
 			container.accept([resource|
 				switch(resource){
@@ -56,10 +55,16 @@ class JtagUIValidator extends JtagValidator {
 					default: throw new IllegalStateException("unknown case "+resource)
 				}
 			])
-			if(!missingFiles.empty){
-				error('''no description for: «missingFiles.join(",\n")»''', JtagPackage.Literals.FOLDER__DESC, 
-								MISSING_XARCHIVE_FILE, missingFiles.join(";;"))
-			}
+		}
+		return missingFiles
+	}
+
+	@Check(CheckType.NORMAL)
+	def checkAllFilesHaveDescription(Folder folder) {
+		val List<String> missingFiles=getFilesWithoutDefinition(folder, ws)
+		if(!missingFiles.empty){
+			error('''no description for: «missingFiles.join(",\n")»''', JtagPackage.Literals.FOLDER__DESC, 
+							MISSING_XARCHIVE_FILE, missingFiles.join(";;"))
 		}
 	}
 }
