@@ -44,11 +44,15 @@ public class SearchDate {
 			throw new IllegalStateException("date format was not checked");
 		}
 		try{
-			LocalDate.of(year.orElse(2004),month.orElse(1), day.orElse(1));
+			LocalDate.of(year.orElse(2004), month.orElse(1), day.orElse(1));
 			return true;
 		}catch(Exception e){
 			return false;
 		}
+	}
+
+	public boolean isYearDefined(){
+		return year.isPresent();
 	}
 
 	private Optional<Integer> toInteger(String segment){
@@ -61,5 +65,29 @@ public class SearchDate {
 
 	private boolean isWildcard(String segment){
 		return segment.length()==1 && segment.charAt(0)=='?';
+	}
+
+	boolean isBeforeOrEqual(SearchDate other){
+		if(isYearDefined() && other.isYearDefined()){
+			int yearCompare=compare(year, other.year);
+			if(yearCompare==0){
+				int monthCompare=compare(month, other.month);
+				if(monthCompare==0){
+					return compare(day, other.day)<=0;
+				}else{
+					return monthCompare<0;
+				}
+			}else{
+				return yearCompare<0;
+			}
+		}
+		return true;
+	}
+
+	private int compare(Optional<Integer> i1, Optional<Integer> i2){
+		if(i1.isPresent() && i2.isPresent()){
+			return i1.get().compareTo(i2.get());
+		}
+		return -1;
 	}
 }

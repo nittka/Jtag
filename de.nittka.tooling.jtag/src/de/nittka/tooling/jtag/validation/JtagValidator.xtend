@@ -24,6 +24,7 @@ import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.CheckType
 import java.util.Optional
+import de.nittka.tooling.jtag.datesearch.IntervalSearch
 
 //import org.eclipse.xtext.validation.Check
 
@@ -136,7 +137,13 @@ class JtagValidator extends AbstractJtagValidator {
 		checkSearchDate(search.exact, search, JtagPackage.Literals.DATE_SEARCH__EXACT);
 		val fromDate=checkSearchDate(search.from, search, JtagPackage.Literals.DATE_SEARCH__FROM);
 		val toDate=checkSearchDate(search.to, search, JtagPackage.Literals.DATE_SEARCH__TO);
-
+		if(fromDate.present && toDate.present){
+			val intervalSearch=new IntervalSearch(fromDate.get, toDate.get)
+			val error=intervalSearch.searchIntervalError
+			if(error.present){
+				error(error.get, search, JtagPackage.Literals.DATE_SEARCH__TO)
+			}
+		}
 	}
 
 	def private Optional<SearchDate> checkSearchDate(String dateString, DateSearch context, EStructuralFeature feature){
