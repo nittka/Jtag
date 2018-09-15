@@ -47,7 +47,8 @@ AtomicSearchExpression returns SearchExpression:
 	ParenthesizedSearchExpression |
 	CategorySearch|
 	TagSearch|
-	TextSearch
+	TextSearch|
+	DateSearch
 ;
 
 
@@ -70,6 +71,10 @@ TagSearch returns SearchExpression:
 
 TextSearch returns SearchExpression:
 	"text" {TextSearch} text=STRING
+;
+
+DateSearch returns SearchExpression:
+	"date" {DateSearch} ((exact=SearchDate) | (("from" from=SearchDate) ("to" to=SearchDate)?) | "to" to=SearchDate)
 ;
 
 Folder:
@@ -98,5 +103,6 @@ ShortCut: type=[CategoryType]":" category=[Category];
 
 FileNameWithExtension hidden(): ID'.'ID;
 Date hidden():INT"-"INT"-"INT;
+SearchDate hidden(): (INT|"?")"-"(INT|"?")"-"(INT|"?");
 terminal ID: ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'-'|'0'..'9')*;
 

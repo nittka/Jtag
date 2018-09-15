@@ -19,7 +19,7 @@ Require-Bundle: de.nittka.tooling.jtag;visibility:=reexport,
  org.eclipse.ui.navigator;bundle-version="3.6.0"
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: de.nittka.tooling.jtag.ui.quickfix,
  de.nittka.tooling.jtag.ui.contentassist,
  de.nittka.tooling.jtag.ui.contentassist.antlr,

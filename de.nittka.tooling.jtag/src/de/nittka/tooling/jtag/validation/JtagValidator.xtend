@@ -3,23 +3,27 @@
  */
 package de.nittka.tooling.jtag.validation
 
+import de.nittka.tooling.jtag.datesearch.SearchDate
 import de.nittka.tooling.jtag.jtag.Category
 import de.nittka.tooling.jtag.jtag.CategoryType
+import de.nittka.tooling.jtag.jtag.DateSearch
 import de.nittka.tooling.jtag.jtag.File
 import de.nittka.tooling.jtag.jtag.JtagConfig
 import de.nittka.tooling.jtag.jtag.JtagPackage
+import de.nittka.tooling.jtag.jtag.Search
 import java.util.List
 import java.util.Map
 import java.util.Set
 import java.util.regex.Pattern
 import javax.inject.Inject
+import org.eclipse.emf.ecore.EStructuralFeature
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.resource.IEObjectDescription
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.CheckType
-import de.nittka.tooling.jtag.jtag.Search
+import java.util.Optional
 
 //import org.eclipse.xtext.validation.Check
 
@@ -81,7 +85,7 @@ class JtagValidator extends AbstractJtagValidator {
 
 	val static Pattern datePattern=Pattern.compile("\\d{4}(-\\d{2}){2,2}")
 
-	@Check
+	@Check(CheckType.FAST)
 	def checkDateFormant(File doc) {
 		if(doc.date!==null){
 			if(!datePattern.matcher(doc.date).matches){
@@ -125,5 +129,31 @@ class JtagValidator extends AbstractJtagValidator {
 		if(search.name!==null && !search.ignore.empty){
 			warning("ignore patters will not be considered when reusing the search, they will only be applied when executing this named search directly", JtagPackage.Literals.SEARCH__NAME)
 		}
+	}
+
+	@Check(CheckType.FAST)
+	def checkSearchDate(DateSearch search) {
+		checkSearchDate(search.exact, search, JtagPackage.Literals.DATE_SEARCH__EXACT);
+		val fromDate=checkSearchDate(search.from, search, JtagPackage.Literals.DATE_SEARCH__FROM);
+		val toDate=checkSearchDate(search.to, search, JtagPackage.Literals.DATE_SEARCH__TO);
+
+	}
+
+	def private Optional<SearchDate> checkSearchDate(String dateString, DateSearch context, EStructuralFeature feature){
+		if(dateString!=null){
+			val searchDate=new SearchDate(dateString)
+			if(searchDate.syntaxValid){
+				if(!searchDate.supportedDateFormat){
+					error("unsupported search date", context,feature);
+				} else if(searchDate.isValidDate()){
+					return Optional.of(searchDate);
+				}else{
+					error("illegal date", context,feature);
+				}
+			}else{
+				error("illegal date format", context,feature);
+			}
+		}
+		return Optional.empty
 	}
 }
