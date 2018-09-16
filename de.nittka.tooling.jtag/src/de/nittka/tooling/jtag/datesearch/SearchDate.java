@@ -93,8 +93,9 @@ public class SearchDate {
 	}
 	
 	public boolean isExactMatch(String date){
-		SearchDate other=new SearchDate(date);
-		if(other.isSyntaxValid() && other.isSupportedDateFormat() && other.isValidDate()){
+		Optional<SearchDate> otherOpt=getImageDateAsSearchDate(date);
+		if(otherOpt.isPresent()){
+			SearchDate other=otherOpt.get();
 			boolean monthDayMatch = monthCompare(this, other)<=0 && monthCompare(other, this)<=0;
 			if(monthDayMatch){
 				if(isYearDefined() && other.isYearDefined()){
@@ -105,6 +106,32 @@ public class SearchDate {
 			}
 		}
 		return false;
+	}
+
+	public boolean isFromMatch(String date){
+		Optional<SearchDate> otherOpt=getImageDateAsSearchDate(date);
+		if(otherOpt.isPresent()){
+			SearchDate other=otherOpt.get();
+			return isBeforeOrEqual(other);
+		}
+		return false;
+	}
+
+	public boolean isToMatch(String date){
+		Optional<SearchDate> otherOpt=getImageDateAsSearchDate(date);
+		if(otherOpt.isPresent()){
+			SearchDate other=otherOpt.get();
+			return other.isBeforeOrEqual(this);
+		}
+		return false;
+	}
+
+	private Optional<SearchDate> getImageDateAsSearchDate(String date){
+		SearchDate other=new SearchDate(date);
+		if(other.isSyntaxValid() && other.isSupportedDateFormat() && other.isValidDate()){
+			return Optional.of(other);
+		}
+		return Optional.empty();
 	}
 
 	private int monthCompare(SearchDate d1, SearchDate d2){
