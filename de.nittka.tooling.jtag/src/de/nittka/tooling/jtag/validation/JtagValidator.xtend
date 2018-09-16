@@ -25,6 +25,7 @@ import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.CheckType
 import java.util.Optional
 import de.nittka.tooling.jtag.datesearch.IntervalSearch
+import java.time.LocalDate
 
 //import org.eclipse.xtext.validation.Check
 
@@ -91,6 +92,12 @@ class JtagValidator extends AbstractJtagValidator {
 		if(doc.date!==null){
 			if(!datePattern.matcher(doc.date).matches){
 				error("illegal date format (yyyy-mm-dd)", JtagPackage.Literals.FILE__DATE)
+			} else {
+				try{
+					LocalDate.parse(doc.date)
+				}catch(Exception e){
+					error("illegal date", JtagPackage.Literals.FILE__DATE)
+				}
 			}
 		}
 	}

@@ -47,8 +47,12 @@ class JtagQuickfixProvider extends DefaultQuickfixProvider {
 				val newEntry=factory.createFile
 				newEntry.setFileName(factory.createFileName)
 				newEntry.fileName.setFileName(maybeEscape(target.fullPath.lastSegment))
-				newEntry.setDate(getDate(target))
+				val date=getDate(target)
+				newEntry.setDate(date)
 				newEntry.tags.add("quickfix")
+				if(date===null){
+					newEntry.tags.add("noDate")
+				}
 				entriesToAdd.add(newEntry)
 			]
 			val folder=obj as Folder
