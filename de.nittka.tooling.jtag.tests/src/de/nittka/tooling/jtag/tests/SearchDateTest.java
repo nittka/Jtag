@@ -124,13 +124,52 @@ public class SearchDateTest {
 	}
 
 	private void dateValid(String date){
-		SearchDate searchDate = new SearchDate(date);
-		Assert.assertTrue(searchDate.isSupportedDateFormat() && searchDate.isValidDate());
+		Assert.assertTrue(getSearchDate(date).isValidDate());
 	}
 
 	private void dateInvalid(String date){
+		Assert.assertFalse(getSearchDate(date).isValidDate());
+	}
+
+	@Test
+	public void testExactMatch(){
+		String imageDate="2015-03-17";
+		assertExactMatch("2015-03-17", imageDate);
+		assertExactMatch("2015-03-?", imageDate);
+		assertExactMatch("2015-?-?", imageDate);
+		assertExactMatch("?-03-17", imageDate);
+		assertExactMatch("?-03-?", imageDate);
+
+		rejectExactMatch("2014-03-17", imageDate);
+		rejectExactMatch("2016-03-17", imageDate);
+		rejectExactMatch("2015-02-17", imageDate);
+		rejectExactMatch("2015-04-17", imageDate);
+		rejectExactMatch("2015-03-18", imageDate);
+		rejectExactMatch("2015-03-16", imageDate);
+		rejectExactMatch("2015-02-?", imageDate);
+		rejectExactMatch("2015-04-?", imageDate);
+		rejectExactMatch("2014-?-?", imageDate);
+		rejectExactMatch("2016-?-?", imageDate);
+		rejectExactMatch("?-02-17", imageDate);
+		rejectExactMatch("?-04-17", imageDate);
+		rejectExactMatch("?-02-?", imageDate);
+		rejectExactMatch("?-04-?", imageDate);
+	}
+
+	private void assertExactMatch(String searchDate, String imageDate){
+		SearchDate sd = getSearchDate(searchDate);
+		Assert.assertTrue(sd.isExactMatch(imageDate));
+	}
+
+	private void rejectExactMatch(String searchDate, String imageDate){
+		SearchDate sd = getSearchDate(searchDate);
+		Assert.assertFalse(sd.isExactMatch(imageDate));
+		
+	}
+
+	private SearchDate getSearchDate(String date){
 		SearchDate searchDate = new SearchDate(date);
 		Assert.assertTrue(searchDate.isSupportedDateFormat());
-		Assert.assertFalse(searchDate.isValidDate());
+		return searchDate;
 	}
 }

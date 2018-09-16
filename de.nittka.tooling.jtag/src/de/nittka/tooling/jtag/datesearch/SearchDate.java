@@ -80,8 +80,9 @@ public class SearchDate {
 			}else{
 				return yearCompare<0;
 			}
+		}else{
+			return monthCompare(this, other)<=0;
 		}
-		return true;
 	}
 
 	private int compare(Optional<Integer> i1, Optional<Integer> i2){
@@ -89,5 +90,29 @@ public class SearchDate {
 			return i1.get().compareTo(i2.get());
 		}
 		return -1;
+	}
+	
+	public boolean isExactMatch(String date){
+		SearchDate other=new SearchDate(date);
+		if(other.isSyntaxValid() && other.isSupportedDateFormat() && other.isValidDate()){
+			boolean monthDayMatch = monthCompare(this, other)<=0 && monthCompare(other, this)<=0;
+			if(monthDayMatch){
+				if(isYearDefined() && other.isYearDefined()){
+					return compare(year, other.year)==0;
+				}else{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private int monthCompare(SearchDate d1, SearchDate d2){
+		int monthCompare=compare(d1.month, d2.month);
+		if(monthCompare==0){
+			return compare(d1.day, d2.day);
+		}else{
+			return monthCompare;
+		}
 	}
 }
