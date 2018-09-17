@@ -10,7 +10,11 @@ import org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler;
 import org.eclipse.xtext.ui.editor.hover.html.DefaultEObjectHoverProvider;
 import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 
+import de.nittka.tooling.jtag.ui.highlighting.JtagHighlightingConfiguration;
+import de.nittka.tooling.jtag.ui.highlighting.JtagSemanticHighlighter;
 import de.nittka.tooling.jtag.ui.hover.JTagEObjectHover;
 import de.nittka.tooling.jtag.ui.hover.JtagHoverProvider;
 import de.nittka.tooling.jtag.ui.linking.JtagFindReferencesHandler;
@@ -65,6 +69,14 @@ public class JtagUiModule extends de.nittka.tooling.jtag.ui.AbstractJtagUiModule
 
 	public Class<? extends IEObjectHoverDocumentationProvider> bindEObjectHover(){
 		return JTagEObjectHover.class;
+	}
+
+	public Class<? extends ISemanticHighlightingCalculator> bindHighlighter(){
+		return JtagSemanticHighlighter.class;
+	}
+
+	public Class<? extends IHighlightingConfiguration> bindHighlightingConfig(){
+		return JtagHighlightingConfiguration.class;
 	}
 
 //	public Class<? extends XtextTemplateContextType> bindTemplateContextType() {
