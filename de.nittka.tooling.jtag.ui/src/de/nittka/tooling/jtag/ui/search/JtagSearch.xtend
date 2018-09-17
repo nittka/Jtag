@@ -22,6 +22,9 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.resource.IEObjectDescription
 import org.eclipse.xtext.resource.IReferenceDescription
+import de.nittka.tooling.jtag.jtag.DateSearch
+import de.nittka.tooling.jtag.datesearch.SearchDate
+import de.nittka.tooling.jtag.datesearch.IntervalSearch
 
 //TODO prevent SearchReference loops
 //TODO refine tag and description search
@@ -48,7 +51,11 @@ class JtagSearch {
 		if(description.matchesIgnorePattern){
 			return false
 		}else{
-			return apply(search.search)
+			try{
+				return apply(search.search)
+			}catch(JtagNoDatePresentException e){
+				return false;
+			}
 		}
 	}
 
@@ -106,6 +113,36 @@ class JtagSearch {
 		return userData("desc").toLowerCase.contains(searchString)
 			|| userData("title").toLowerCase.contains(searchString)
 			|| desc.qualifiedName.toString.toLowerCase.contains(searchString)
+	}
+
+	def private dispatch boolean internalApply(DateSearch exp){
+		val date=userData("date")
+		if(date.nullOrEmpty){
+			throw new JtagNoDatePresentException
+		}
+		//TODO reuse Objects - new instantiations not necessary, as only the date changes...
+		if(exp.exact!==null){
+			return getSearchDate(exp.exact).isExactMatch(date)
+		}else{
+			val from=exp.from;
+			val to=exp.to;
+			if(from!==null && to!==null){
+				return new IntervalSearch(getSearchDate(from), getSearchDate(to)).isMatch(date)
+			}else if(from!==null){
+				return getSearchDate(from).isFromMatch(date)
+			}else{
+				return getSearchDate(to).isToMatch(date)
+			}
+		}
+	}
+
+	def private getSearchDate(String date){
+		val searchDate=new SearchDate(date)
+		if(searchDate.supportedDateFormat){
+			return searchDate
+		}else{
+			throw new IllegalStateException("search date should have been validated")
+		}
 	}
 
 	def private dispatch boolean internalApply(CategorySearch exp){
