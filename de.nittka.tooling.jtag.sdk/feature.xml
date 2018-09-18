@@ -4,6 +4,10 @@
       label="Jtag SDK Feature "
       version="1.0.2.qualifier">
 
+   <requires>
+      <import plugin="com.drewnoakes.metadataextractor"/>
+   </requires>
+
    <plugin
          id="de.nittka.tooling.jtag"
          download-size="0"
