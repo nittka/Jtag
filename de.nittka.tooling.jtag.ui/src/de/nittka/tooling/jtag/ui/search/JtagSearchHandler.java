@@ -28,6 +28,7 @@ import org.eclipse.xtext.validation.Issue;
 import com.google.common.base.Predicates;
 import com.google.inject.Inject;
 
+import de.nittka.tooling.jtag.jtag.JtagSearches;
 import de.nittka.tooling.jtag.jtag.Search;
 
 public class JtagSearchHandler extends AbstractHandler {
@@ -88,12 +89,21 @@ public class JtagSearchHandler extends AbstractHandler {
 			return;
 		}
 		JtagSearchQuery query=queryProvider.get();
-		String searchName=search.getName()!=null?search.getName():"unnamed Xarchive search";
+		String searchName=getSearchName(search);
 		//dummy initialization of ReferenceQuery
 		query.init(null, Predicates.<IReferenceDescription>alwaysTrue(), searchName);
 		//the essential initialization of XarchiveSearchQuery (the actual search context)
 		query.setSearch(search);
 		NewSearchUI.activateSearchResultView();
 		NewSearchUI.runQueryInBackground(query);
+	}
+
+	private String getSearchName(Search search){
+		if(search.getName()!=null){
+			return "Jtag search '"+search.getName()+"'";
+		}else{
+			int index = ((JtagSearches)search.eContainer()).getSearches().indexOf(search)+1;
+			return "Jtag search '"+search.eResource().getURI().lastSegment()+"' #"+index;
+		}
 	}
 }
