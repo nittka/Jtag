@@ -7,7 +7,7 @@ public class JtagSearchFileWizard extends JtagFileWizard{
 
 	public JtagSearchFileWizard() {
 		mainPageTitle="creates a jtag searches file";
-		initialFileContent= "search ";
+		initialFileContent= "//move the cursor to a search and press Alt-x to start the search\nsearch tag quickfix";
 	}
 
 	@Override
