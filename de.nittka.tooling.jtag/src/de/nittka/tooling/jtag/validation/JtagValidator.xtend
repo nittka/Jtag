@@ -3,6 +3,7 @@
  */
 package de.nittka.tooling.jtag.validation
 
+import de.nittka.tooling.jtag.datesearch.IntervalSearch
 import de.nittka.tooling.jtag.datesearch.SearchDate
 import de.nittka.tooling.jtag.jtag.Category
 import de.nittka.tooling.jtag.jtag.CategoryType
@@ -10,9 +11,12 @@ import de.nittka.tooling.jtag.jtag.DateSearch
 import de.nittka.tooling.jtag.jtag.File
 import de.nittka.tooling.jtag.jtag.JtagConfig
 import de.nittka.tooling.jtag.jtag.JtagPackage
+import de.nittka.tooling.jtag.jtag.JtagSearches
 import de.nittka.tooling.jtag.jtag.Search
+import java.time.LocalDate
 import java.util.List
 import java.util.Map
+import java.util.Optional
 import java.util.Set
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -23,9 +27,6 @@ import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.CheckType
-import java.util.Optional
-import de.nittka.tooling.jtag.datesearch.IntervalSearch
-import java.time.LocalDate
 
 //import org.eclipse.xtext.validation.Check
 
@@ -130,6 +131,49 @@ class JtagValidator extends AbstractJtagValidator {
 		if(configs.size>1){
 			error("there is more than one archive configuration file:"+configs.map[name.toString].join(", "), JtagPackage.Literals.JTAG_CONFIG__TYPES)
 		}
+	}
+
+	@Check(CheckType.NORMAL)
+	def checkSearchNamesLocal(JtagSearches searches) {
+		val Set<String> existingNames=newHashSet()
+		val Set<String> duplicateNames=newHashSet()
+		searches.searches.filter[name!==null].forEach[
+			val searchName=name
+			if(existingNames.contains(searchName)){
+				duplicateNames.add(searchName)
+			} else {
+				existingNames.add(searchName)
+			}
+		]
+		if(!duplicateNames.empty){
+			searches.searches.forEach[
+				if(duplicateNames.contains(name)){
+					error("duplicate name", it, JtagPackage.Literals.SEARCH__NAME)
+				}
+			]
+		}
+	}
+
+	@Check(CheckType.NORMAL)
+	def checkSearchNamesGlobal(JtagSearches searches) {
+		val List<String>otherSearchNames=newArrayList
+		val index=indexProvider.getResourceDescriptions(searches.eResource)
+		val containerManager=serviceProvider.containerManager
+		val visibleContainer=containerManager.getVisibleContainers(serviceProvider.resourceDescriptionManager.getResourceDescription(searches.eResource), index)
+		val myUri=searches.eResource.URI
+		visibleContainer.forEach[
+			resourceDescriptions.forEach[
+				if(myUri!=URI){
+					val exportedNames=it.getExportedObjectsByType(JtagPackage.Literals.SEARCH).map[name.toString];
+					otherSearchNames.addAll(exportedNames)
+				}
+			]
+		]
+		searches.searches.forEach[
+			if(otherSearchNames.contains(name)){
+				error("duplicate name (in other search file)", it, JtagPackage.Literals.SEARCH__NAME)
+			}
+		]
 	}
 
 	@Check(CheckType.NORMAL)
