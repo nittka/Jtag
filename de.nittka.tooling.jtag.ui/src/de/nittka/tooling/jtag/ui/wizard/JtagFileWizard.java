@@ -1,6 +1,8 @@
 package de.nittka.tooling.jtag.ui.wizard;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -11,6 +13,9 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
@@ -24,22 +29,35 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.xtext.resource.SaveOptions;
+import org.eclipse.xtext.serializer.ISerializer;
+import org.eclipse.xtext.ui.resource.XtextResourceSetProvider;
 import org.eclipse.xtext.ui.util.FileOpener;
 import org.eclipse.xtext.util.StringInputStream;
 
 import com.google.common.base.Strings;
 
+import de.nittka.tooling.jtag.jtag.File;
+import de.nittka.tooling.jtag.jtag.Folder;
+import de.nittka.tooling.jtag.jtag.JtagFactory;
+import de.nittka.tooling.jtag.ui.quickfix.JtagQuickfixProvider;
+
 public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements org.eclipse.ui.INewWizard {
 
 	@Inject
 	private FileOpener fileOpener;
+	@Inject
+	private ISerializer jtagSerializer;
+	@Inject
+	private XtextResourceSetProvider resourceSetProvider;
+	@Inject
+	private JtagQuickfixProvider quickfixes;
 
 	private IContainer folder;
 	private WizardPage mainPage;
 	private String currentValidFileName;
 
 	protected String mainPageTitle="creates a jtag file for the selected folder";
-	protected String initialFileContent="folder \"short description of folder content\"";
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		//enablement in plugin.xml ensures single container selection
@@ -155,7 +173,7 @@ public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements o
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					IFile newFile = folder.getFile(new Path(currentValidFileName));
 					try {
-						newFile.create(new StringInputStream(initialFileContent), true, monitor);
+						newFile.create(new StringInputStream( getInitialFileContent()), true, monitor);
 						fileOpener.openFileToEdit(getShell(), newFile);
 						monitor.done();
 					} catch (CoreException e) {
@@ -168,5 +186,26 @@ public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements o
 			return false;
 		}
 		return true;
+	}
+
+	protected String getInitialFileContent() throws CoreException{
+		JtagFactory factory = JtagFactory.eINSTANCE;
+		Folder jtagFolder = factory.createFolder();
+		jtagFolder.setDesc("short description of folder content");
+
+		IResource[] files = folder.members(IResource.FILE);
+		List<String> fileNames=new ArrayList<>();
+		for (IResource iResource : files) {
+			fileNames.add(iResource.getName());
+		}
+		List<File> filesToAdd = quickfixes.getFiles(folder, fileNames);
+		jtagFolder.getFiles().addAll(filesToAdd);
+
+		ResourceSet rs = resourceSetProvider.get(folder.getProject());
+		Resource resource = rs.createResource(URI.createPlatformResourceURI("test.jtag",true));
+		resource.getContents().add(jtagFolder);
+
+		String result = jtagSerializer.serialize(jtagFolder, SaveOptions.newBuilder().noValidation().format().getOptions());
+		return result;
 	}
 }

@@ -7,7 +7,6 @@ public class JtagSearchFileWizard extends JtagFileWizard{
 
 	public JtagSearchFileWizard() {
 		mainPageTitle="creates a jtag searches file";
-		initialFileContent= "//move the cursor to a search and press Alt-x to start the search\nsearch tag quickfix";
 	}
 
 	@Override
@@ -18,5 +17,10 @@ public class JtagSearchFileWizard extends JtagFileWizard{
 	@Override
 	protected String getProposedFileName(IContainer folder) {
 		return "jtagSearches";
+	}
+
+	@Override
+	protected String getInitialFileContent() {
+		return "//move the cursor to a search and press Alt-x to start the search\nsearch tag quickfix";
 	}
 }

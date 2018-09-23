@@ -21,6 +21,11 @@ import java.util.List
 import de.nittka.tooling.jtag.jtag.File
 import java.text.Collator
 import java.util.Locale
+import org.eclipse.core.resources.IContainer
+import de.nittka.tooling.jtag.services.JtagGrammarAccess
+import javax.inject.Inject
+import org.eclipse.xtext.GrammarUtil
+import java.util.Set
 
 //import org.eclipse.xtext.ui.editor.quickfix.Fix
 //import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor
@@ -33,38 +38,58 @@ import java.util.Locale
  */
 class JtagQuickfixProvider extends DefaultQuickfixProvider {
 
+	@Inject
+	JtagGrammarAccess grammar;
+
 	@Fix(JtagUIValidator::MISSING_XARCHIVE_FILE)
 	def addMissingXarchive(Issue issue, IssueResolutionAcceptor acceptor) {
 		val fileNames=issue.data.get(0).split(";;").toList
-		val sorter=Collator.getInstance(Locale.GERMANY)
 		acceptor.accept(issue, 'Jtag entries for '+fileNames.join(",\n"), 'creates new entries', null) [
 			obj, context |
-			val List<File>entriesToAdd=newArrayList
-			fileNames.sortInplace([a,b|sorter.compare(a,b)]).forEach[fileName|
-				val file=context.xtextDocument.getAdapter(IFile)
-				val target=file.parent.getFile(new Path(fileName))
-				val factory =JtagFactory.eINSTANCE
-				val newEntry=factory.createFile
-				newEntry.setFileName(factory.createFileName)
-				newEntry.fileName.setFileName(maybeEscape(target.fullPath.lastSegment))
-				val date=getDate(target)
-				newEntry.setDate(date)
-				newEntry.tags.add("quickfix")
-				if(date===null){
-					newEntry.tags.add("noDate")
-				}
-				entriesToAdd.add(newEntry)
-			]
+			val container=context.xtextDocument.getAdapter(IFile).parent
+			val filesToAdd=getFiles(container, fileNames)
 			val folder=obj as Folder
-			folder.files.addAll(entriesToAdd)
+			folder.files.addAll(filesToAdd)
 		]
 	}
 
-	def String maybeEscape(String fileName){
+	def List<File> getFiles(IContainer container, List<String> fileNames){
+		val List<File>entriesToAdd=newArrayList
+		val sorter=Collator.getInstance(Locale.GERMANY)
+		fileNames.sortInplace([a,b|sorter.compare(a,b)])
+		.filter[name|!name.isIgnoreFileName]
+		.forEach[fileName|
+			val target=container.getFile(new Path(fileName))
+			val factory =JtagFactory.eINSTANCE
+			val newEntry=factory.createFile
+			newEntry.setFileName(factory.createFileName)
+			newEntry.fileName.setFileName(maybeEscape(target.fullPath.lastSegment))
+			val date=getDate(target)
+			newEntry.setDate(date)
+			newEntry.tags.add("quickfix")
+			if(date===null){
+				newEntry.tags.add("noDate")
+			}
+			entriesToAdd.add(newEntry)
+		]
+		return entriesToAdd
+	}
+
+	def private boolean isIgnoreFileName(String fileName){
+		if(fileName==".project" || fileName.endsWith(".jtag")){
+			return true
+		}
+		return false;
+	}
+
+	def private String maybeEscape(String fileName){
 		//rough approximation of the FileNameWithExtension rule
-		//if the name matches - no escaping necessary 
+		//if the name matches - no escaping necessary
+		val Set<String> keywords=GrammarUtil.getAllKeywords(grammar.grammar);
 		val char dot='.'
-		if(fileName.matches("[a-zA-Z0-9._-]*")){
+		if(keywords.exists[fileName.startsWith(it)]){
+			//escaping necessary
+		}else if(fileName.matches("[a-zA-Z0-9._-]*")){
 			val int firstDotIndex=fileName.indexOf(dot)
 			if(firstDotIndex<=0 || fileName.substring(firstDotIndex+1).indexOf(dot) <=0){
 				return fileName;
@@ -73,7 +98,7 @@ class JtagQuickfixProvider extends DefaultQuickfixProvider {
 		return '''"«fileName»"'''
 	}
 
-	def private String getDate(IFile f){
+	def private static String getDate(IFile f){
 		try{
 			val Metadata metadata = ImageMetadataReader.readMetadata(f.contents);
 			val dir= metadata.directories.filter(ExifSubIFDDirectory).head
