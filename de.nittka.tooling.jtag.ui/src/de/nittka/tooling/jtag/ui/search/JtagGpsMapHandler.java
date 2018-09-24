@@ -17,9 +17,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -96,6 +98,8 @@ public class JtagGpsMapHandler  extends AbstractHandler{
 			} catch (IOException | PartInitException e) {
 				JtagPerspective.logError("error showing gps html", e);
 			}
+		}else{
+			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), "Nothing to show", "Could not find any files containing location information...");
 		}
 	}
 }
