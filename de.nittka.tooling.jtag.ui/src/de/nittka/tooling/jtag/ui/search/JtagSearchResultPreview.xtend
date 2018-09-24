@@ -42,7 +42,7 @@ class JtagSearchResultPreview {
 	'''
 	}
 
-	def String render(IReferenceDescription desc, XtextResourceSet rs){
+	def private String render(IReferenceDescription desc, XtextResourceSet rs){
 		val EObject e=rs.getEObject(desc.targetEObjectUri,true)
 		if(e instanceof File){
 			val file=e as File

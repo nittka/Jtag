@@ -8,6 +8,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -38,6 +39,7 @@ import com.google.common.io.Files;
 
 import de.nittka.tooling.jtag.jtag.JtagPackage;
 import de.nittka.tooling.jtag.jtag.Search;
+import de.nittka.tooling.jtag.ui.internal.JtagActivator;
 import de.nittka.tooling.jtag.ui.preferences.JtagRootPreferencePage;
 
 //we derive from ReferenceQuery in order to reuse much of Xtext's search infrastructure
@@ -51,6 +53,8 @@ public class JtagSearchQuery extends ReferenceQuery {
 	private IResourceServiceProvider serviceProvider;
 	@Inject
 	private JtagSearchResultPreview preview;
+	@Inject
+	private JtagGpsPreview gps;
 	@Inject
 	private IPreferenceStoreAccess preferenceStoreAccess;
 
@@ -77,15 +81,32 @@ public class JtagSearchQuery extends ReferenceQuery {
 
 	private void maybeOpenBrowser(ReferenceSearchResult result){
 		try {
+			boolean openGpsWanted=preferenceStoreAccess.getPreferenceStore().getBoolean(JtagRootPreferencePage.OPEN_GPS_BROWSER_ON_JTAG_SEARCH);
+			if(openGpsWanted && !result.getMatchingReferences().isEmpty()){
+				File tempFile= getTempFileLocation().append("JtagSearchGps.html").toFile();
+				String gpsHtml=gps.createHtml(result);
+				if(gpsHtml!=null){
+					Files.write(gpsHtml, tempFile, StandardCharsets.UTF_8);
+					PlatformUI.getWorkbench().getBrowserSupport().createBrowser("JtagSearchGpsPreview").openURL(tempFile.toURL());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
 			boolean openHtmlWanted=preferenceStoreAccess.getPreferenceStore().getBoolean(JtagRootPreferencePage.OPEN_HTML_BROWSER_ON_JTAG_SEARCH);
 			if(openHtmlWanted && !result.getMatchingReferences().isEmpty()){
-				File tempFile= ResourcesPlugin.getWorkspace().getRoot().getLocation().append(".metadata").append("JtagSearchPreview.html").toFile();
+				File tempFile= getTempFileLocation().append("JtagSearchPreview.html").toFile();
 				Files.write(preview.createHtml(result), tempFile, StandardCharsets.ISO_8859_1);
 				PlatformUI.getWorkbench().getBrowserSupport().createBrowser("JtagSearchPreview").openURL(tempFile.toURL());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private IPath getTempFileLocation(){
+		return JtagActivator.getInstance().getStateLocation();
 	}
 
 	private void internalRun(IProgressMonitor monitor, IAcceptor<IReferenceDescription> acceptor){
