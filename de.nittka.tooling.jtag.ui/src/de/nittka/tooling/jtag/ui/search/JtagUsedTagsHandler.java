@@ -21,6 +21,8 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 
 import com.google.common.base.Joiner;
 
+import de.nittka.tooling.jtag.ui.JtagPerspective;
+
 public class JtagUsedTagsHandler  extends AbstractHandler{
 
 	@Inject
@@ -39,7 +41,7 @@ public class JtagUsedTagsHandler  extends AbstractHandler{
 				});
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			JtagPerspective.logError("error collecting tags", e);
 		}
 		return null;
 	}

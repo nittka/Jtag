@@ -32,6 +32,7 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import com.google.common.io.Files;
 
 import de.nittka.tooling.jtag.jtag.Folder;
+import de.nittka.tooling.jtag.ui.JtagPerspective;
 import de.nittka.tooling.jtag.ui.internal.JtagActivator;
 
 public class JtagGpsMapHandler  extends AbstractHandler{
@@ -44,22 +45,18 @@ public class JtagGpsMapHandler  extends AbstractHandler{
 		IWorkbenchPage page = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
 		ISelection selection = page.getSelection();
 		if(selection instanceof TextSelection){
-			try {
-				XtextEditor editor = EditorUtils.getActiveXtextEditor(event);
-				if (editor != null) {
-					editor.getDocument().readOnly(new IUnitOfWork.Void<XtextResource>() {
-						@Override
-						public void process(XtextResource state) throws Exception {
-							if(state!=null && !state.getContents().isEmpty()){
-								if(state.getContents().get(0) instanceof Folder){
-									showHtml(gpsPreview.createHtml((Folder)state.getContents().get(0)));
-								}
+			XtextEditor editor = EditorUtils.getActiveXtextEditor(event);
+			if (editor != null) {
+				editor.getDocument().readOnly(new IUnitOfWork.Void<XtextResource>() {
+					@Override
+					public void process(XtextResource state) throws Exception {
+						if(state!=null && !state.getContents().isEmpty()){
+							if(state.getContents().get(0) instanceof Folder){
+								showHtml(gpsPreview.createHtml((Folder)state.getContents().get(0)));
 							}
 						}
-					});
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
+					}
+				});
 			}
 		} else if(selection instanceof StructuredSelection){
 			Iterator<?> iterator = ((StructuredSelection) selection).iterator();
@@ -81,7 +78,7 @@ public class JtagGpsMapHandler  extends AbstractHandler{
 							}
 						});
 					} catch (CoreException e) {
-						e.printStackTrace();
+						JtagPerspective.logError("error collecting files from selection", e);
 					}
 				}
 			}
@@ -97,7 +94,7 @@ public class JtagGpsMapHandler  extends AbstractHandler{
 				Files.write(html, tempFile, StandardCharsets.ISO_8859_1);
 				PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(tempFile.toURI().toURL());
 			} catch (IOException | PartInitException e) {
-				e.printStackTrace();
+				JtagPerspective.logError("error showing gps html", e);
 			}
 		}
 	}

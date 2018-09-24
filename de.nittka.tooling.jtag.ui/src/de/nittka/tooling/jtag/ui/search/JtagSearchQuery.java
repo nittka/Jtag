@@ -41,6 +41,7 @@ import com.google.common.io.Files;
 
 import de.nittka.tooling.jtag.jtag.JtagPackage;
 import de.nittka.tooling.jtag.jtag.Search;
+import de.nittka.tooling.jtag.ui.JtagPerspective;
 import de.nittka.tooling.jtag.ui.internal.JtagActivator;
 import de.nittka.tooling.jtag.ui.preferences.JtagRootPreferencePage;
 
@@ -93,7 +94,7 @@ public class JtagSearchQuery extends ReferenceQuery {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			JtagPerspective.logError("error creating gps html", e);
 		}
 		try {
 			boolean openHtmlWanted=preferenceStoreAccess.getPreferenceStore().getBoolean(JtagRootPreferencePage.OPEN_HTML_BROWSER_ON_JTAG_SEARCH);
@@ -103,7 +104,7 @@ public class JtagSearchQuery extends ReferenceQuery {
 				openBrowser(tempFile);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			JtagPerspective.logError("error creating search html", e);
 		}
 	}
 

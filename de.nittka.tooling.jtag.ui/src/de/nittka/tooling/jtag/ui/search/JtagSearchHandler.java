@@ -30,6 +30,7 @@ import com.google.inject.Inject;
 
 import de.nittka.tooling.jtag.jtag.JtagSearches;
 import de.nittka.tooling.jtag.jtag.Search;
+import de.nittka.tooling.jtag.ui.JtagPerspective;
 
 public class JtagSearchHandler extends AbstractHandler {
 
@@ -62,7 +63,7 @@ public class JtagSearchHandler extends AbstractHandler {
 				});
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			JtagPerspective.logError("error executing jtag search", e);
 		}
 		return null;
 	}
