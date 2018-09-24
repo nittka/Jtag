@@ -3,6 +3,7 @@ package de.nittka.tooling.jtag.ui.search
 import com.drew.imaging.ImageMetadataReader
 import com.drew.metadata.Metadata
 import com.drew.metadata.exif.GpsDirectory
+import de.nittka.tooling.jtag.jtag.Folder
 import de.nittka.tooling.jtag.ui.JtagFileURIs
 import java.io.File
 import java.util.List
@@ -12,21 +13,41 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.resource.IReferenceDescription
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.eclipse.xtext.ui.editor.findrefs.ReferenceSearchResult
+import java.util.Collection
+import org.eclipse.core.resources.IFile
 
 class JtagGpsPreview {
 
 	@Inject
 	Provider<XtextResourceSet> rsProvider;
-	int resultCount=0
 
 	def String createHtml(ReferenceSearchResult searchResult){
-		resultCount=0
 		val List<IReferenceDescription> matches=searchResult.matchingReferences
 		val rs=rsProvider.get
-		val html='''
+		val markers= matches.map[render(rs)]
+		return createHtml(markers)
+	}
+
+	def String createHtml(Folder jtagFolder){
+		val markers=jtagFolder.files.map[render]
+		return createHtml(markers)
+	}
+
+	def String createHtml(Collection<IFile> files){
+		val markers=files.map[render(it.location.toFile)].toList
+		return createHtml(markers)
+	}
+
+	def private String createHtml(List<String> markers){
+		val nonNullMarkers=markers.filterNull.toList
+		if(nonNullMarkers.empty){
+			return null
+		}
+		return 
+		'''
 			<html>
 			<head>
-			  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+			  <meta http-equiv="content-type" content="text/html; charset=ISO_8859_1">
 			  <style>
 			   .popup img{
 			    max-width:200px;
@@ -39,7 +60,7 @@ class JtagGpsPreview {
 			  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
 			  <script>
 			    var gpsMarkers = [
-			      «FOR entry: matches.map[render(rs)].filterNull SEPARATOR ","»
+			      «FOR entry: nonNullMarkers SEPARATOR ","»
 			        «entry»
 			      «ENDFOR»
 			    ];
@@ -54,12 +75,12 @@ class JtagGpsPreview {
 			    var bounds =new OpenLayers.Bounds();
 			    for (var i = 0; i < gpsMarkers.length; i++){
 			      var obj = gpsMarkers[i];
-			      addMarker(obj["id"], obj["lon"], obj["lat"], obj["title"], obj["imgLoc"]);
+			      addMarker('id'+(i+1), obj["lon"], obj["lat"], obj["title"], obj["imgLoc"]);
 			    }
 			    if(gpsMarkers.length>0){
 			      var zoom=map.getZoomForExtent(markers.getDataExtent())
-			      if(zoom > 11){
-			        zoom = 11;
+			      if(zoom > 13){
+			        zoom = 13;
 			      }
 			      map.setCenter(bounds.getCenterLonLat(), zoom);
 			    } else {
@@ -86,22 +107,21 @@ class JtagGpsPreview {
 			  </script>
 			</body></html>
 		'''
-		return if(resultCount>0){
-			html
-		}else{
-			null
-		}
 	}
 
 	def private String render(IReferenceDescription desc, XtextResourceSet rs){
 		val EObject e=rs.getEObject(desc.targetEObjectUri,true)
 		if(e instanceof de.nittka.tooling.jtag.jtag.File){
-			val file=e as de.nittka.tooling.jtag.jtag.File
-			val location=JtagFileURIs.getImageLocation(file)
-			if(location!==null){
-				val javaFile=new File(location)
-				return render(javaFile)
-			}
+			return render(e as de.nittka.tooling.jtag.jtag.File)
+		}
+		return null
+	}
+
+	def private String render(de.nittka.tooling.jtag.jtag.File file){
+		val location=JtagFileURIs.getImageLocation(file)
+		if(location!==null){
+			val javaFile=new File(location)
+			return render(javaFile)
 		}
 		return null
 	}
@@ -110,20 +130,23 @@ class JtagGpsPreview {
 		if(f.exists){
 			val gpsLoc=getGpsLocation(f)
 			if(gpsLoc!==null){
-				resultCount=resultCount+1
-				return '''{"id":"id«resultCount»", "lon":"«gpsLoc.longitude»", "lat":"«gpsLoc.latitude»", "title":"«f.name»", "imgLoc":"«f.toPath.toUri»"}'''
+				return '''{"lon":"«gpsLoc.longitude»", "lat":"«gpsLoc.latitude»", "title":"«f.name»", "imgLoc":"«f.toPath.toUri»"}'''
 			}
 		}
 	}
 
 	def private getGpsLocation(File f){
-		val Metadata metadata = ImageMetadataReader.readMetadata(f);
-		val dir= metadata.directories.filter(GpsDirectory).head
-		if(dir!==null){
-			val loc=(dir as GpsDirectory).geoLocation
-			if(loc!==null){
-				return loc
+		try{
+			val Metadata metadata = ImageMetadataReader.readMetadata(f);
+			val dir= metadata.directories.filter(GpsDirectory).head
+			if(dir!==null){
+				val loc=(dir as GpsDirectory).geoLocation
+				if(loc!==null){
+					return loc
+				}
 			}
+		} catch(Exception e){
+			//ignore
 		}
 	}
 }

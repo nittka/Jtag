@@ -35,6 +35,10 @@
             </activeWhen>
         </handler>
         <handler
+            class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:de.nittka.tooling.jtag.ui.search.JtagGpsMapHandler"
+            commandId="de.nittka.tooling.jtag.ui.showgpsmap">
+        </handler>
+        <handler
             class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
             commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
             <activeWhen>
@@ -168,6 +172,12 @@
             categoryId="org.eclipse.ui.category.edit"
             description="Copies the tags used in Jtag files to the clipboard"
             name="Copy Used Tags">
+      </command>
+      <command
+            id="de.nittka.tooling.jtag.ui.showgpsmap"
+            categoryId="org.eclipse.ui.category.navigate"
+            description="Shows image location of the selection on a map"
+            name="Show on map">
       </command>
     </extension>
     <extension point="org.eclipse.ui.menus">
@@ -351,7 +361,7 @@
 		</handler>
 	</extension>
     <extension point="org.eclipse.ui.menus">
-         <menuContribution
+      <menuContribution
             locationURI="popup:#TextEditorContext?after=group.edit">
          <command commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
                style="push">
@@ -361,6 +371,34 @@
                </reference>
             </visibleWhen>
          </command>
+      </menuContribution>
+      <menuContribution
+          locationURI="popup:#TextEditorContext?before=group.edit">
+       <command
+             commandId="de.nittka.tooling.jtag.ui.showgpsmap"
+             style="push"
+             tooltip="Jtag - Show Locations on map">
+          <visibleWhen
+                checkEnabled="false">
+             <reference
+                   definitionId="de.nittka.tooling.jtag.Jtag.Editor.opened">
+             </reference>
+          </visibleWhen>
+       </command>
+      </menuContribution>
+      <menuContribution
+          locationURI="popup:#TextEditorContext?before=group.edit">
+       <command
+             commandId="de.nittka.tooling.jtag.ui.tags"
+             style="push"
+             tooltip="Jtag Tags">
+          <visibleWhen
+                checkEnabled="false">
+             <reference
+                   definitionId="de.nittka.tooling.jtag.Jtag.Editor.opened">
+             </reference>
+          </visibleWhen>
+       </command>
       </menuContribution>
       <menuContribution
           locationURI="popup:#TextEditorContext?before=group.edit">
@@ -375,23 +413,17 @@
              </reference>
           </visibleWhen>
        </command>
-    </menuContribution>
+      </menuContribution>
       <menuContribution
-          locationURI="popup:#TextEditorContext?before=group.edit">
+          locationURI="popup:de.nittka.tooling.jtag.navigatorView?after=group.goto">
        <command
-             commandId="de.nittka.tooling.jtag.ui.tags"
+             commandId="de.nittka.tooling.jtag.ui.showgpsmap"
              style="push"
-             tooltip="Jtag Tags">
-          <visibleWhen
-                checkEnabled="false">
-             <reference
-                   definitionId="de.nittka.tooling.jtag.Jtag.Editor.opened">
-             </reference>
-          </visibleWhen>
+             tooltip="Jtag - Show Locations on map">
        </command>
-    </menuContribution>
-   </extension>
-   <extension point="org.eclipse.ui.preferencePages">
+      </menuContribution>
+    </extension>
+    <extension point="org.eclipse.ui.preferencePages">
 	    <page
 	        category="de.nittka.tooling.jtag.Jtag"
 	        class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"

@@ -1,6 +1,7 @@
 package de.nittka.tooling.jtag.ui.search;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.resource.IContainer;
 import org.eclipse.xtext.resource.IContainer.Manager;
@@ -86,8 +88,8 @@ public class JtagSearchQuery extends ReferenceQuery {
 				File tempFile= getTempFileLocation().append("JtagSearchGps.html").toFile();
 				String gpsHtml=gps.createHtml(result);
 				if(gpsHtml!=null){
-					Files.write(gpsHtml, tempFile, StandardCharsets.UTF_8);
-					PlatformUI.getWorkbench().getBrowserSupport().createBrowser("JtagSearchGpsPreview").openURL(tempFile.toURL());
+					Files.write(gpsHtml, tempFile, StandardCharsets.ISO_8859_1);
+					openBrowser(tempFile);
 				}
 			}
 		} catch (Exception e) {
@@ -98,11 +100,15 @@ public class JtagSearchQuery extends ReferenceQuery {
 			if(openHtmlWanted && !result.getMatchingReferences().isEmpty()){
 				File tempFile= getTempFileLocation().append("JtagSearchPreview.html").toFile();
 				Files.write(preview.createHtml(result), tempFile, StandardCharsets.ISO_8859_1);
-				PlatformUI.getWorkbench().getBrowserSupport().createBrowser("JtagSearchPreview").openURL(tempFile.toURL());
+				openBrowser(tempFile);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void openBrowser(File tempFile) throws PartInitException, MalformedURLException{
+		PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(tempFile.toURI().toURL());
 	}
 
 	private IPath getTempFileLocation(){
