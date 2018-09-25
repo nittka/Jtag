@@ -9,6 +9,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.search.ui.ISearchResultViewPart;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.diagnostics.Severity;
@@ -28,7 +29,6 @@ import org.eclipse.xtext.validation.Issue;
 import com.google.common.base.Predicates;
 import com.google.inject.Inject;
 
-import de.nittka.tooling.jtag.jtag.JtagSearches;
 import de.nittka.tooling.jtag.jtag.Search;
 import de.nittka.tooling.jtag.ui.JtagPerspective;
 
@@ -90,21 +90,11 @@ public class JtagSearchHandler extends AbstractHandler {
 			return;
 		}
 		JtagSearchQuery query=queryProvider.get();
-		String searchName=getSearchName(search);
+		ISearchResultViewPart part = NewSearchUI.activateSearchResultView();
+		//the essential initialization of JtagSearchQuery (the actual search context)
+		query.setSearch(search, part);
 		//dummy initialization of ReferenceQuery
-		query.init(null, Predicates.<IReferenceDescription>alwaysTrue(), searchName);
-		//the essential initialization of XarchiveSearchQuery (the actual search context)
-		query.setSearch(search);
-		NewSearchUI.activateSearchResultView();
+		query.init(null, Predicates.<IReferenceDescription>alwaysTrue(), query.getLabel());
 		NewSearchUI.runQueryInBackground(query);
-	}
-
-	private String getSearchName(Search search){
-		if(search.getName()!=null){
-			return "Jtag search '"+search.getName()+"'";
-		}else{
-			int index = ((JtagSearches)search.eContainer()).getSearches().indexOf(search)+1;
-			return "Jtag search '"+search.eResource().getURI().lastSegment()+"' #"+index;
-		}
 	}
 }

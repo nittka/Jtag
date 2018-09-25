@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -17,6 +16,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.search.ui.ISearchQuery;
+import org.eclipse.search.ui.ISearchResultViewPart;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -40,6 +40,7 @@ import org.eclipse.xtext.xbase.lib.IteratorExtensions;
 import com.google.common.io.Files;
 
 import de.nittka.tooling.jtag.jtag.JtagPackage;
+import de.nittka.tooling.jtag.jtag.JtagSearches;
 import de.nittka.tooling.jtag.jtag.Search;
 import de.nittka.tooling.jtag.ui.JtagPerspective;
 import de.nittka.tooling.jtag.ui.internal.JtagActivator;
@@ -63,9 +64,20 @@ public class JtagSearchQuery extends ReferenceQuery {
 
 
 	private JtagSearch search;
+	private ISearchResultViewPart part;
+	private String baseLabel;
+	private int resultCount;
 
-	void setSearch(Search search){
+	void setSearch(Search search, ISearchResultViewPart part){
+		resultCount=-1;
 		this.search=new JtagSearch(search);
+		this.part=part;
+		if(search.getName()!=null){
+			baseLabel = "Jtag search '"+search.getName()+"'";
+		}else{
+			int index = ((JtagSearches)search.eContainer()).getSearches().indexOf(search)+1;
+			baseLabel = "Jtag search '"+search.eResource().getURI().lastSegment()+"' #"+index;
+		}
 	}
 
 	//we override this method in order to provider our own search results
@@ -74,12 +86,40 @@ public class JtagSearchQuery extends ReferenceQuery {
 	//search results
 	@Override
 	public IStatus run(IProgressMonitor monitor) throws OperationCanceledException {
+		resultCount=-1;
 		ReferenceSearchResult result=(ReferenceSearchResult)getSearchResult();
 		result.reset();
 		internalRun(monitor, result);
 		result.finish();
+		updateLabel(result);
 		maybeOpenBrowser(result);
 		return (monitor.isCanceled()) ? Status.CANCEL_STATUS : Status.OK_STATUS;
+	}
+
+	private void updateLabel(ReferenceSearchResult result){
+		if(part!=null){
+			try{
+				resultCount=result.getMatchingReferences().size();
+				Display.getDefault().asyncExec(new Runnable(){
+
+					@Override
+					public void run() {
+						part.updateLabel();
+					}
+				});
+			}catch(Exception e){
+				//ignore
+			}
+		}
+	}
+
+	@Override
+	public String getLabel() {
+		if(resultCount>=0){
+			return baseLabel+" ("+resultCount+" matches)";
+		}else{
+			return baseLabel;
+		}
 	}
 
 	private void maybeOpenBrowser(ReferenceSearchResult result){
