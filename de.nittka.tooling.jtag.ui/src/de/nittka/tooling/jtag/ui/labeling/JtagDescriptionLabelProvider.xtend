@@ -8,6 +8,7 @@ import org.eclipse.xtext.resource.IEObjectDescription
 import org.eclipse.xtext.resource.IReferenceDescription
 import org.eclipse.xtext.resource.IResourceDescription
 import org.eclipse.xtext.ui.label.DefaultDescriptionLabelProvider
+import org.eclipse.emf.common.util.URI
 
 //import org.eclipse.xtext.resource.IEObjectDescription
 
@@ -50,15 +51,33 @@ class JtagDescriptionLabelProvider extends DefaultDescriptionLabelProvider {
 	}
 
 	override text(IReferenceDescription referenceDescription) {
-		if(referenceDescription.sourceEObjectUri.toString.contains("/@search/")){
+		val sourceURI=referenceDescription.sourceEObjectUri.toString
+		if(sourceURI.contains("/@search/")){
 			return "unnamed search"
+		} else if(sourceURI.contains("//@categories.")){
+			if(isType(referenceDescription.targetEObjectUri)){
+				return "folder category type"
+			} else{
+				return "folder category"
+			}
 		}
 	}
 
 	override image(IReferenceDescription referenceDescription) {
-		if(referenceDescription.sourceEObjectUri.toString.contains("/@search/")){
+		val sourceURI=referenceDescription.sourceEObjectUri.toString
+		if(sourceURI.contains("/@search/")){
 			return "search.png"
+		} else if(sourceURI.contains("//@categories.")){
+			if(isType(referenceDescription.targetEObjectUri)){
+				return "categorytype.gif"
+			} else{
+				return "category.gif"
+			}
 		}
+	}
+
+	def private boolean isType(URI targetURi){
+		return !targetURi.toString.contains("/@category.")
 	}
 
 }
