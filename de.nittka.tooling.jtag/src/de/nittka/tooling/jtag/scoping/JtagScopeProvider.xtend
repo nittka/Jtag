@@ -5,6 +5,7 @@ package de.nittka.tooling.jtag.scoping
 
 import de.nittka.tooling.jtag.jtag.Category
 import de.nittka.tooling.jtag.jtag.CategoryRef
+import de.nittka.tooling.jtag.jtag.ShortCut
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.xtext.EcoreUtil2
 import org.eclipse.xtext.scoping.IScope
@@ -23,4 +24,9 @@ class JtagScopeProvider extends AbstractDeclarativeScopeProvider {
 	def IScope scope_CategoryRef_categories(CategoryRef context, EReference ref){
 		return Scopes.scopeFor(EcoreUtil2.getAllContentsOfType(context.type, Category));
 	}
+
+	def IScope scope_ShortCut_category(ShortCut context, EReference ref){
+		return Scopes.scopeFor(EcoreUtil2.getAllContentsOfType(context.type, Category));
+	}
+
 }
