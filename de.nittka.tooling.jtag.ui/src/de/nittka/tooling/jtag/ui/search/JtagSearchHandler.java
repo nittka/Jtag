@@ -32,6 +32,7 @@ import org.eclipse.xtext.validation.Issue;
 import com.google.common.base.Predicates;
 import com.google.inject.Inject;
 
+import de.nittka.tooling.jtag.jtag.JtagSearches;
 import de.nittka.tooling.jtag.jtag.Search;
 import de.nittka.tooling.jtag.jtag.SearchReference;
 import de.nittka.tooling.jtag.ui.JtagPerspective;
@@ -55,13 +56,23 @@ public class JtagSearchHandler extends AbstractHandler {
 				editor.getDocument().readOnly(new IUnitOfWork.Void<XtextResource>() {
 					@Override
 					public void process(XtextResource state) throws Exception {
-						EObject target = eObjectAtOffsetHelper.resolveContainedElementAt(state, selection.getOffset());
+						if(state==null)return;
+						if(state.getContents().isEmpty() || !(state.getContents().get(0) instanceof JtagSearches)){
+							if(!state.getParseResult().getRootNode().getText().contains("search")){
+								return;
+							}
+						}
 						//at this point we just make sure that seach is only executed on search objects
 						//(also excluding comments and white spaces before the search keyword)
+						EObject target = eObjectAtOffsetHelper.resolveContainedElementAt(state, selection.getOffset());
 						Search search=EcoreUtil2.getContainerOfType(target, Search.class);
-						ICompositeNode searchNode = NodeModelUtils.findActualNodeFor(search);
-						if(search !=null && searchNode!=null && searchNode.getOffset()<selection.getOffset()){
-							execute(search);
+						if(search==null){
+							MessageDialog.openError(Display.getCurrent().getActiveShell(), "Cannot execute Jtag search", "There seems to be a syntax error preventing the search.");
+						}else{
+							ICompositeNode searchNode = NodeModelUtils.findActualNodeFor(search);
+							if(search !=null && searchNode!=null && searchNode.getOffset()<selection.getOffset()){
+								execute(search);
+							}
 						}
 					}
 				});
@@ -78,9 +89,11 @@ public class JtagSearchHandler extends AbstractHandler {
 			String searchFragment = s.eResource().getURIFragment(s);
 			for (Issue issue : errors) {
 				if(issue.getSeverity()==Severity.ERROR){
-					String errorFragment = issue.getUriToProblem().fragment();
-					if(errorFragment.startsWith(searchFragment)){
-						return true;
+					if(issue.getUriToProblem()!=null){
+						String errorFragment = issue.getUriToProblem().fragment();
+						if(errorFragment.startsWith(searchFragment)){
+							return true;
+						}
 					}
 				}
 			}

@@ -66,7 +66,7 @@ Due to few images and none with gps data, the "Open preview in browser" and "Sho
 * show on Map
 
 ## Jtag search
-* no search executed if error in definition (also in reused named search)
+* no search executed if error in definition (also in reused named search, syntax errors in file/other searches)
 * simple text search (file name, title, description)
 * simple category search
 * simple tag search
