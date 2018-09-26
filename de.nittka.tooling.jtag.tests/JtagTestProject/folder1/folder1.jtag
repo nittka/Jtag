@@ -1,0 +1,19 @@
+folder "folder with subfolders and image"
+
+"f 1.txt"
+.
+
+f2.txt
+type1: category3;
+tags: quickfix
+.
+
+image.jpg 2018-09-26 "(2018-09-26)"
+type1:category1;
+tags: realImage
+.
+
+f3.txt 2019-12-03 "(2019-12-03)"
+tags: anotherTag
+.
+

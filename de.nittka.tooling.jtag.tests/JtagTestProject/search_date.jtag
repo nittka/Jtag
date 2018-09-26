@@ -1,0 +1,23 @@
+//search named textSearch text "tada
+
+search tag quickfixs
+
+//legal searches
+search date 2018-09-26
+search date 2018-09-?
+search date 2018-?-?
+search date ?-09-01
+search date ?-09-?
+
+search date from ?-08-?
+search date to ?-08-?
+
+search date from ?-09-? to ?-03-?
+
+//illegal searches
+search date 201-03-14
+search date 2013-01-32
+search date ?-?-?
+search date ?-?-12
+search date 2013-?-12
+search date from 2012-01-01 to 2011-01-01

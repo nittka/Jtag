@@ -1,0 +1,35 @@
+	
+		folder 
+	"short description of folder content"
+
+
+
+f1.txt 2018-09-01 "Title root file 1 (2018-09-01)"
+type1:category1,category2
+//, category1
+;
+//type1:category1;
+	
+	tags: quickfix
+description
+"This is a longer description for the first file in the root folder.
+The date is part of the title in order to check date searches"
+
+
+.
+
+f2.txt 2017-08-02 "Title root file 2 (2017-08-02)"
+  type1:category3, 
+     subCategory1;
+tags: noDate
+  description    "This is a very short description for the second file".
+
+f3.txt 
+	2016-03-31
+		"Title root file 3 (2016-03-31)"
+type2: category5, subCategory4;
+tags: quickfix  ,  noDate
+description 
+"File 3 has no description".
+
+		

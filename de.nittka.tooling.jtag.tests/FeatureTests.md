@@ -2,6 +2,8 @@
 
 This is a list of features for which tests would be nice.
 In the long run automated tests would be nice, but...
+Most of the following features can be tested using the JtagTestProject.
+Due to few images and none with gps data, the "Open preview in browser" and "Show On Map" features cannot be well tested.
 
 ## Editor
 * Formatting
@@ -38,9 +40,9 @@ In the long run automated tests would be nice, but...
     * invalid date
     * illegal interval
   * described file exists
-  * all files in file have description (ignore pattern matches excluded)
+  * all files in file have description (ignore pattern matches) excluded)
 * Quickfix
-  * add entries for missing files
+  * add entries for missing files (ignor patterns!)
 * Hover
   * category type description
   * category description
@@ -92,7 +94,7 @@ show image
   * directly visible under "New"
   * proposed name
   * name validation (empty, file extension, file already exists, no white spaces)
-  * warning if jtag file already exists (not for search)
+  * warning if jtag file already exists (not for root folder)
   * initial content (file definitions including dates / initial search)
 * show on Map action
 * image view reacts to selection change

@@ -1,0 +1,18 @@
+search named textSearch text "desc"
+ignore "/subfolder1/"
+//search named textSearch text " 2"
+
+search text "Title" //&& text "2"
+
+search category type1:category1
+
+search category type1:category1 orBelow
+
+search category type1:subCategory1 orAbove
+
+search tag quickfix
+
+search tag noDate
+
+search reuse textSearch 
+

@@ -1,0 +1,21 @@
+categoriesFor type1 "First Type" {
+	category1 "Category1 in first type" {
+		subCategory1, subCategory2 "subcategory 2 in category 1"
+		//,category1
+	},
+	category2,
+	category3
+//	,category1
+}
+
+categoriesFor type2 "Second Type" {
+	category4 "Category1 in second type" {
+		subCategory3, subCategory4 "subcategory 2 in category 4"
+//		,category1
+	},
+	category5,
+	category6
+//	,category1
+}
+
+//categoriesFor type1{cat7}
