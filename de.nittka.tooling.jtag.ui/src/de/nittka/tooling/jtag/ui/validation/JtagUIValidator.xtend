@@ -16,7 +16,7 @@ import org.eclipse.xtext.validation.CheckType
 
 class JtagUIValidator extends JtagValidator {
 
-	public static val MISSING_XARCHIVE_FILE="missingJtag"
+	public static val MISSING_JTAG_FILE="missingJtag"
 
 	@Inject IWorkspace ws;
 
@@ -64,7 +64,7 @@ class JtagUIValidator extends JtagValidator {
 		val List<String> missingFiles=getFilesWithoutDefinition(folder, ws)
 		if(!missingFiles.empty){
 			error('''no description for: «missingFiles.join(",\n")»''', JtagPackage.Literals.FOLDER__DESC, 
-							MISSING_XARCHIVE_FILE, missingFiles.join(";;"))
+							MISSING_JTAG_FILE, missingFiles.join(";;"))
 		}
 	}
 }

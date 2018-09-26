@@ -41,7 +41,7 @@ class JtagQuickfixProvider extends DefaultQuickfixProvider {
 	@Inject
 	JtagGrammarAccess grammar;
 
-	@Fix(JtagUIValidator::MISSING_XARCHIVE_FILE)
+	@Fix(JtagUIValidator::MISSING_JTAG_FILE)
 	def addMissingXarchive(Issue issue, IssueResolutionAcceptor acceptor) {
 		val fileNames=issue.data.get(0).split(";;").toList
 		acceptor.accept(issue, 'Jtag entries for '+fileNames.join(",\n"), 'creates new entries', null) [
