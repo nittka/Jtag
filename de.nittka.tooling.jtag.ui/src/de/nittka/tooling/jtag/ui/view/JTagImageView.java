@@ -181,7 +181,9 @@ public class JTagImageView extends ViewPart implements ISelectionListener, IPart
 					File file = EcoreUtil2.getContainerOfType(model,File.class);
 					if(file!=null){
 						ICompositeNode fileNode = NodeModelUtils.findActualNodeFor(file);
-						if(fileNode.getOffset()<=selection.getOffset()){
+						int fileEndOffset=fileNode.getOffset()+fileNode.getLength();
+						int selectionEndOffset=selection.getOffset()+selection.getLength();
+						if(fileNode.getOffset()<=selection.getOffset() && selectionEndOffset<=fileEndOffset){
 							String imageLocation = JtagFileURIs.getImageLocation(file);
 							showFile(imageLocation, false);
 							return null;
