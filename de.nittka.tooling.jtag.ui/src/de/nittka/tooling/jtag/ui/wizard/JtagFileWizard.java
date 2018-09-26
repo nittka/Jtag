@@ -193,10 +193,12 @@ public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements o
 		Folder jtagFolder = factory.createFolder();
 		jtagFolder.setDesc("short description of folder content");
 
-		IResource[] files = folder.members(IResource.FILE);
+		IResource[] files = folder.members();
 		List<String> fileNames=new ArrayList<>();
 		for (IResource iResource : files) {
-			fileNames.add(iResource.getName());
+			if(iResource instanceof IFile){
+				fileNames.add(iResource.getName());
+			}
 		}
 		List<File> filesToAdd = quickfixes.getFiles(folder, fileNames);
 		jtagFolder.getFiles().addAll(filesToAdd);
