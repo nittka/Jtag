@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<templates>
+  <template id="jtagSimpleCategoryTemplate" autoinsert="false" context="de.nittka.tooling.jtag.Jtag.CategoryRef" deleted="false" description="add a category to the fila" enabled="true" name="category">${categoryType}: ${category};&#13;
+${cursor}</template>
+</templates>

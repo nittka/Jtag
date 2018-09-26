@@ -18,7 +18,8 @@ Due to few images and none with gps data, the "Open preview in browser" and "Sho
     * in search
   * ignore in folder
     * (only) missing file
-    * file patterns 
+    * file patterns
+  * category template in file
   * date from exif
 * Validation
   * at most one configuration file
