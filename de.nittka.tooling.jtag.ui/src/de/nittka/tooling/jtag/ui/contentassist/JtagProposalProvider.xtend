@@ -13,6 +13,8 @@ import org.eclipse.xtext.Assignment
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor
 import org.eclipse.core.runtime.Path
+import de.nittka.tooling.jtag.ui.quickfix.JtagQuickfixProvider
+import de.nittka.tooling.jtag.jtag.File
 
 /**
  * see http://www.eclipse.org/Xtext/documentation.html#contentAssist on how to customize content assistant
@@ -23,6 +25,8 @@ class JtagProposalProvider extends AbstractJtagProposalProvider {
 	var JtagTagCounter tagCounter;
 	@Inject
 	IWorkspace workspace
+	@Inject
+	JtagQuickfixProvider quickfix
 
 	override completeFile_Tags(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		val tags=tagCounter.getTags(model.eResource)
@@ -39,5 +43,16 @@ class JtagProposalProvider extends AbstractJtagProposalProvider {
 		undefinedFiles.forEach[acceptor.accept(createCompletionProposal('''"«it»"''', context))]
 		val fileExtensions=undefinedFiles.map[new Path(it).fileExtension].toSet
 		fileExtensions.forEach[acceptor.accept(createCompletionProposal('''"*.«it»"''', null, null, 350,context.prefix, context))]
+	}
+
+	def completeFile_Date(File model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		var file=workspace.root.findMember(model.eResource.URI.toPlatformString(true));
+		var quickfixFiles=quickfix.getFiles(file.parent, newArrayList(model.fileName.fileName))
+		if(quickfixFiles.size>0){
+			var date=quickfixFiles.get(0).date
+			if(date!=null){
+				acceptor.accept(createCompletionProposal(date, context))
+			}
+		}
 	}
 }
