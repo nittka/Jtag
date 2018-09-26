@@ -21,6 +21,7 @@ Due to few images and none with gps data, the "Open preview in browser" and "Sho
     * file patterns
   * category template in file
   * date from exif
+  * file name when description is missing
 * Validation
   * at most one configuration file
   * duplicate category type
@@ -31,18 +32,19 @@ Due to few images and none with gps data, the "Open preview in browser" and "Sho
     * between type definitions (warning)
     * within File description
   * date format in file description
+  * described file exists
+  * all files in file have description (ignore pattern matches) excluded)
+  * folder ignore pattern does not cover a missing file (warning)
   * names for searches unique
     * within file
     * between files
   * no ignore patterns in named search (warning)
+  * unused tag in search (warning)
   * search date
     * basic syntax
     * format (wildcard patterns)
     * invalid date
     * illegal interval
-  * described file exists
-  * all files in file have description (ignore pattern matches) excluded)
-  * unused tag in search (warning)
 * Quickfix
   * add entries for missing files (ignor patterns!)
 * Hover

@@ -75,7 +75,7 @@ class JtagQuickfixProvider extends DefaultQuickfixProvider {
 		return false;
 	}
 
-	def private String maybeEscape(String fileName){
+	def String maybeEscape(String fileName){
 		//rough approximation of the FileNameWithExtension rule
 		//if the name matches - no escaping necessary
 		val char dot='.'

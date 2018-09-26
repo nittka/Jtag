@@ -34,10 +34,14 @@ class JtagUIValidator extends JtagValidator {
 		}
 	}
 
-	def static List<String> getFilesWithoutDefinition(Folder folder, IWorkspace workspace){
+	def static List<String> getFilesWithoutDefinition(Folder folder, IWorkspace workspace, boolean considerIgnorePatterns){
 		val file=workspace.root.getFile(new Path(folder.eResource.getURI.toPlatformString(true)))
 		val existingJtag=folder.files.map[fileName.fileName]
-		val folderIgnores=folder.ignore.map[p|p.replaceAll("\\.","\\\\.").replaceAll("\\*","\\.*").replaceAll("\\(","\\\\(").replaceAll("\\)","\\\\)")]
+		val List<String>folderIgnores=if(considerIgnorePatterns){
+			folder.ignore.map[prepareIgnorePattern]
+		}else{
+			#[]
+		}
 		val List<String> missingFiles=newArrayList
 		if(file.exists){
 			val container=file.parent
@@ -62,9 +66,25 @@ class JtagUIValidator extends JtagValidator {
 		return missingFiles
 	}
 
+	def private static String prepareIgnorePattern(String patternString){
+		return patternString.replaceAll("\\.","\\\\.").replaceAll("\\*","\\.*").replaceAll("\\(","\\\\(").replaceAll("\\)","\\\\)")
+	}
+
+	@Check(CheckType.NORMAL)
+	def checkUnusedIgnorePatterns(Folder folder){
+		if(!folder.ignore.empty){
+			val missingFiles=getFilesWithoutDefinition(folder, ws, false)
+			folder.ignore.forEach[pattern, index|
+				if(!missingFiles.exists[file|file.matches(pattern.prepareIgnorePattern())]){
+					warning("no file without description matches this pattern", folder, JtagPackage.Literals.FOLDER__IGNORE, index)
+				}
+			]
+		}
+	}
+
 	@Check(CheckType.NORMAL)
 	def checkAllFilesHaveDescription(Folder folder) {
-		val List<String> missingFiles=getFilesWithoutDefinition(folder, ws)
+		val List<String> missingFiles=getFilesWithoutDefinition(folder, ws, true)
 		if(!missingFiles.empty){
 			error('''no description for: «missingFiles.join(",\n")»''', JtagPackage.Literals.FOLDER__DESCRIPTION, 
 							MISSING_JTAG_FILE, missingFiles.join(";;"))

@@ -3,18 +3,18 @@
  */
 package de.nittka.tooling.jtag.ui.contentassist
 
+import de.nittka.tooling.jtag.jtag.File
 import de.nittka.tooling.jtag.jtag.Folder
+import de.nittka.tooling.jtag.ui.quickfix.JtagQuickfixProvider
 import de.nittka.tooling.jtag.ui.search.JtagTagCounter
 import de.nittka.tooling.jtag.ui.validation.JtagUIValidator
 import javax.inject.Inject
 import org.eclipse.core.resources.IWorkspace
+import org.eclipse.core.runtime.Path
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.Assignment
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor
-import org.eclipse.core.runtime.Path
-import de.nittka.tooling.jtag.ui.quickfix.JtagQuickfixProvider
-import de.nittka.tooling.jtag.jtag.File
 
 /**
  * see http://www.eclipse.org/Xtext/documentation.html#contentAssist on how to customize content assistant
@@ -39,7 +39,7 @@ class JtagProposalProvider extends AbstractJtagProposalProvider {
 	}
 
 	def completeFolder_Ignore(Folder model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-		val undefinedFiles=JtagUIValidator.getFilesWithoutDefinition(model, workspace)
+		val undefinedFiles=JtagUIValidator.getFilesWithoutDefinition(model, workspace, true)
 		undefinedFiles.forEach[acceptor.accept(createCompletionProposal('''"«it»"''', context))]
 		val fileExtensions=undefinedFiles.map[new Path(it).fileExtension].toSet
 		fileExtensions.forEach[acceptor.accept(createCompletionProposal('''"*.«it»"''', null, null, 350,context.prefix, context))]
@@ -54,5 +54,12 @@ class JtagProposalProvider extends AbstractJtagProposalProvider {
 				acceptor.accept(createCompletionProposal(date, context))
 			}
 		}
+	}
+
+	def completeFileName_FileName(Folder model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		val missingFiles=JtagUIValidator.getFilesWithoutDefinition(model, workspace, false)
+		missingFiles.forEach[
+			acceptor.accept(createCompletionProposal(quickfix.maybeEscape(it), context))
+		]
 	}
 }
