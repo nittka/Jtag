@@ -17,6 +17,7 @@ In the long run automated tests would be nice, but...
 ** ignore in folder
 *** (only) missing file
 *** file patterns 
+** date from exif
 * Validation
 ** at most one configuration file
 ** duplicate category type
