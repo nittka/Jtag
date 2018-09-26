@@ -180,6 +180,10 @@
             name="Show on map">
       </command>
     </extension>
+    <extension point="org.eclipse.ui.commandImages">
+      <image commandId="de.nittka.tooling.jtag.ui.search" icon="icons/search.png" />
+      <image commandId="de.nittka.tooling.jtag.ui.showgpsmap" icon="icons/world.gif" />
+    </extension>
     <extension point="org.eclipse.ui.menus">
         <menuContribution
             locationURI="popup:#TextEditorContext?after=group.edit">
