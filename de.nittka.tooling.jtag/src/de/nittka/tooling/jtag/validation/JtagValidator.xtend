@@ -27,6 +27,7 @@ import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.CheckType
+import de.nittka.tooling.jtag.jtag.CategoryRef
 
 //import org.eclipse.xtext.validation.Check
 
@@ -44,6 +45,18 @@ class JtagValidator extends AbstractJtagValidator {
 	private ResourceDescriptionsProvider indexProvider
 	@Inject
 	private IResourceServiceProvider serviceProvider
+
+	@Check
+	def checkDuplicateCategoryType(JtagConfig doc) {
+		val Set<String> types=newHashSet()
+		doc.types.forEach[t|
+			if (types.contains(t.name)){
+				error("duplicate category type", t, JtagPackage.Literals.CATEGORY_TYPE__NAME)
+			}else{
+				types.add(t.name)
+			}
+		]
+	}
 
 	@Check
 	def checkDuplicateCategoryType(File doc) {
@@ -64,6 +77,18 @@ class JtagValidator extends AbstractJtagValidator {
 		type.category.map[allCategories].flatten.toSet.forEach[
 			if (names.contains(name)){
 				error("duplicate category within "+type.name, it, JtagPackage.Literals.CATEGORY__NAME)
+			}else{
+				names.add(name)
+			}
+		]
+	}
+
+	@Check
+	def checkDuplicateCategoryInRef(CategoryRef ref) {
+		val Set<String> names=newHashSet()
+		ref.categories.forEach[it, index|
+			if (names.contains(name)){
+				error("duplicate category", ref, JtagPackage.Literals.CATEGORY_REF__CATEGORIES, index)
 			}else{
 				names.add(name)
 			}
