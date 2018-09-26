@@ -30,7 +30,7 @@ class JtagFormatter extends AbstractDeclarativeFormatter {
 		c.setLinewrap(0, 1, 2).before(SL_COMMENTRule)
 		c.setLinewrap(0, 1, 2).before(ML_COMMENTRule)
 		c.setLinewrap(0, 1, 1).after(ML_COMMENTRule)
-		findKeywords(",", ":", ";",".").forEach[
+		findKeywords(",", ":", ";").forEach[
 			c.setNoSpace.before(it)
 		]
 
@@ -46,6 +46,7 @@ class JtagFormatter extends AbstractDeclarativeFormatter {
 		c.setLinewrap(1).before(fileAccess.tagsKeyword_4_0_0)
 		c.setLinewrap(1).before(fileAccess.descriptionKeyword_5_0)
 		c.setLinewrap(1).before(categoryRefRule)
+		c.setLinewrap(1).before(fileAccess.fullStopKeyword_6)
 
 		//config
 		c.setLinewrap(2).after(categoryTypeAccess.rightCurlyBracketKeyword_6)
