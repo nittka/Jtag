@@ -6,26 +6,22 @@ package de.nittka.tooling.jtag.ui.quickfix
 import com.drew.imaging.ImageMetadataReader
 import com.drew.metadata.Metadata
 import com.drew.metadata.exif.ExifSubIFDDirectory
+import de.nittka.tooling.jtag.jtag.File
 import de.nittka.tooling.jtag.jtag.Folder
 import de.nittka.tooling.jtag.jtag.JtagFactory
 import de.nittka.tooling.jtag.ui.validation.JtagUIValidator
+import java.text.Collator
 import java.text.SimpleDateFormat
+import java.util.List
+import java.util.Locale
 import java.util.TimeZone
+import org.eclipse.core.resources.IContainer
 import org.eclipse.core.resources.IFile
 import org.eclipse.core.runtime.Path
 import org.eclipse.xtext.ui.editor.quickfix.DefaultQuickfixProvider
 import org.eclipse.xtext.ui.editor.quickfix.Fix
 import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor
 import org.eclipse.xtext.validation.Issue
-import java.util.List
-import de.nittka.tooling.jtag.jtag.File
-import java.text.Collator
-import java.util.Locale
-import org.eclipse.core.resources.IContainer
-import de.nittka.tooling.jtag.services.JtagGrammarAccess
-import javax.inject.Inject
-import org.eclipse.xtext.GrammarUtil
-import java.util.Set
 
 //import org.eclipse.xtext.ui.editor.quickfix.Fix
 //import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor
@@ -37,9 +33,6 @@ import java.util.Set
  * see http://www.eclipse.org/Xtext/documentation.html#quickfixes
  */
 class JtagQuickfixProvider extends DefaultQuickfixProvider {
-
-	@Inject
-	JtagGrammarAccess grammar;
 
 	@Fix(JtagUIValidator::MISSING_JTAG_FILE)
 	def addMissingXarchive(Issue issue, IssueResolutionAcceptor acceptor) {
@@ -85,11 +78,8 @@ class JtagQuickfixProvider extends DefaultQuickfixProvider {
 	def private String maybeEscape(String fileName){
 		//rough approximation of the FileNameWithExtension rule
 		//if the name matches - no escaping necessary
-		val Set<String> keywords=GrammarUtil.getAllKeywords(grammar.grammar);
 		val char dot='.'
-		if(keywords.exists[fileName.startsWith(it)]){
-			//escaping necessary
-		}else if(fileName.matches("[a-zA-Z0-9._-]*")){
+		if(fileName.matches("[a-zA-Z0-9._-]*")){
 			val int firstDotIndex=fileName.indexOf(dot)
 			if(firstDotIndex<=0 || fileName.substring(firstDotIndex+1).indexOf(dot) <=0){
 				return fileName;

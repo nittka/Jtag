@@ -101,7 +101,8 @@ FileName: fileName=(FileNameWithExtension|STRING);
 CategoryRef: type=[CategoryType] ":" (categories+=[Category] ("," categories+=[Category])*)";";
 ShortCut: type=[CategoryType]":" category=[Category];
 
-FileNameWithExtension hidden(): ID'.'ID;
+FileNameWithExtension hidden(): FileNameSegment'.'FileNameSegment;
+FileNameSegment hidden(): ID|"description"|"tags"|"folder"|"ignore"|"from"|"to"|"date"|"search"|"text"|"tag"|"category"|"reuse"|"named";
 Date hidden():INT"-"INT"-"INT;
 SearchDate hidden(): (INT|"?")"-"(INT|"?")"-"(INT|"?");
 terminal ID: ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'-'|'0'..'9')*;
