@@ -12,6 +12,7 @@ public class JtagPreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
+		preferenceStoreAccess.getWritablePreferenceStore().setDefault(JtagRootPreferencePage.FOLD_FILE_DESCRIPTIONS, true);
 		preferenceStoreAccess.getWritablePreferenceStore().setDefault(JtagRootPreferencePage.OPEN_HTML_BROWSER_ON_JTAG_SEARCH, true);
 		preferenceStoreAccess.getWritablePreferenceStore().setDefault(JtagRootPreferencePage.OPEN_GPS_BROWSER_ON_JTAG_SEARCH, false);
 	}

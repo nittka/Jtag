@@ -15,6 +15,7 @@ import org.eclipse.xtext.ui.editor.folding.FoldedPosition;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 
 import de.nittka.tooling.jtag.jtag.Folder;
+import de.nittka.tooling.jtag.ui.preferences.JtagRootPreferencePage;
 
 
 public class JtagXtextEditor extends XtextEditor {
@@ -22,7 +23,8 @@ public class JtagXtextEditor extends XtextEditor {
 	@Override
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
-		boolean shouldFold=getDocument().readOnly(new IUnitOfWork<Boolean, XtextResource>() {
+		boolean foldPreference=getPreferenceStore().getBoolean(JtagRootPreferencePage.FOLD_FILE_DESCRIPTIONS);
+		boolean shouldFold=foldPreference && getDocument().readOnly(new IUnitOfWork<Boolean, XtextResource>() {
 
 			public Boolean exec(XtextResource state) throws Exception {
 				try{
