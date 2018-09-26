@@ -63,7 +63,7 @@ class JtagUIValidator extends JtagValidator {
 	def checkAllFilesHaveDescription(Folder folder) {
 		val List<String> missingFiles=getFilesWithoutDefinition(folder, ws)
 		if(!missingFiles.empty){
-			error('''no description for: «missingFiles.join(",\n")»''', JtagPackage.Literals.FOLDER__DESC, 
+			error('''no description for: «missingFiles.join(",\n")»''', JtagPackage.Literals.FOLDER__DESCRIPTION, 
 							MISSING_JTAG_FILE, missingFiles.join(";;"))
 		}
 	}

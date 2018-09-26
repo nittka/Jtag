@@ -78,7 +78,7 @@ DateSearch returns SearchExpression:
 ;
 
 Folder:
-	"folder" desc=STRING
+	"folder" description=STRING
 	(("ignore"":" ignore+=STRING)("," ignore+=STRING)*)?
 	categories+=CategoryRef*
 	(("tags"":" tags+=ID)("," tags+=ID)*)?

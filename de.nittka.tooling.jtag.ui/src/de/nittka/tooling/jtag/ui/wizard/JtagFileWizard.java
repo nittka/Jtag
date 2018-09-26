@@ -191,7 +191,7 @@ public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements o
 	protected String getInitialFileContent() throws CoreException{
 		JtagFactory factory = JtagFactory.eINSTANCE;
 		Folder jtagFolder = factory.createFolder();
-		jtagFolder.setDesc("short description of folder content");
+		jtagFolder.setDescription("short description of folder content");
 
 		IResource[] files = folder.members();
 		List<String> fileNames=new ArrayList<>();
