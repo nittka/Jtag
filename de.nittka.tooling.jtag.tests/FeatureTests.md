@@ -42,6 +42,7 @@ Due to few images and none with gps data, the "Open preview in browser" and "Sho
     * illegal interval
   * described file exists
   * all files in file have description (ignore pattern matches) excluded)
+  * unused tag in search (warning)
 * Quickfix
   * add entries for missing files (ignor patterns!)
 * Hover

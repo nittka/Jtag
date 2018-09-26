@@ -13,12 +13,15 @@ import org.eclipse.core.resources.IWorkspace
 import org.eclipse.core.runtime.Path
 import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.CheckType
+import de.nittka.tooling.jtag.jtag.TagSearch
+import de.nittka.tooling.jtag.ui.search.JtagTagCounter
 
 class JtagUIValidator extends JtagValidator {
 
 	public static val MISSING_JTAG_FILE="missingJtag"
 
 	@Inject IWorkspace ws;
+	@Inject JtagTagCounter tagCounter;
 
 	@Check
 	def checkFileExistence(FileName file) {
@@ -65,6 +68,15 @@ class JtagUIValidator extends JtagValidator {
 		if(!missingFiles.empty){
 			error('''no description for: «missingFiles.join(",\n")»''', JtagPackage.Literals.FOLDER__DESCRIPTION, 
 							MISSING_JTAG_FILE, missingFiles.join(";;"))
+		}
+	}
+
+	@Check
+	def checkSearchTag(TagSearch search){
+		if(search.tag!==null){
+			if(!tagCounter.getTags(search.eResource).contains(search.tag)){
+				warning("unused tag", JtagPackage.Literals.TAG_SEARCH__TAG)
+			}
 		}
 	}
 }
