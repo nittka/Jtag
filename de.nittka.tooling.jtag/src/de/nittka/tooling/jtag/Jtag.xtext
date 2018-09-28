@@ -98,7 +98,7 @@ File:
 
 FileName: fileName=(FileNameWithExtension|STRING);
 
-CategoryRef: type=[CategoryType] ":" (categories+=[Category] ("," categories+=[Category])*)";";
+CategoryRef: type=[CategoryType] ":" (categories+=[Category] ("," categories+=[Category])*)";"?;
 ShortCut: type=[CategoryType]":" category=[Category];
 
 FileNameWithExtension hidden(): FileNameSegment'.'FileNameSegment;
