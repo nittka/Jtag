@@ -79,7 +79,7 @@ class JtagQuickfixProvider extends DefaultQuickfixProvider {
 		//rough approximation of the FileNameWithExtension rule
 		//if the name matches - no escaping necessary
 		val char dot='.'
-		if(fileName.matches("[a-zA-Z0-9._-]*")){
+		if(fileName.matches("[a-zA-Z_][a-zA-Z0-9._-]*")){
 			val int firstDotIndex=fileName.indexOf(dot)
 			if(firstDotIndex<=0 || fileName.substring(firstDotIndex+1).indexOf(dot) <=0){
 				return fileName;
