@@ -2,6 +2,6 @@
 <templates>
   <template id="jtagSimpleCategoryTemplate" autoinsert="false" context="de.nittka.tooling.jtag.Jtag.CategoryRef" deleted="false" description="add a category to the file" enabled="true" name="category">${type:CrossReference(CategoryRef.type)}: ${category};&#13;
 ${cursor}</template>
-  <template id="jtagSimpleTagsTemplate" autoinsert="true" context="de.nittka.tooling.jtag.Jtag.kw_tags" deleted="false" description="add tags to the file" enabled="true" name="tags">tags: ${tag};&#13;
+  <template id="jtagSimpleTagsTemplate" autoinsert="true" context="de.nittka.tooling.jtag.Jtag.kw_tags" deleted="false" description="add tags to the file" enabled="true" name="tags">tags: ${tag}&#13;
 ${cursor}</template>
 </templates>
