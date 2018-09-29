@@ -40,6 +40,7 @@ import com.google.common.base.Strings;
 import de.nittka.tooling.jtag.jtag.File;
 import de.nittka.tooling.jtag.jtag.Folder;
 import de.nittka.tooling.jtag.jtag.JtagFactory;
+import de.nittka.tooling.jtag.ui.JtagPerspective;
 import de.nittka.tooling.jtag.ui.quickfix.JtagQuickfixProvider;
 
 public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements org.eclipse.ui.INewWizard {
@@ -150,7 +151,7 @@ public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements o
 			errorMessage="file extension must be jtag";
 		} else if(name.indexOf(' ')>=0){
 			errorMessage="file name must not contain white spaces";
-		} else if(folder.findMember(name)!=null){
+		} else if(fileExists(folder, name)){
 			errorMessage="file already exists";
 		} else{
 			currentValidFileName=name;
@@ -158,6 +159,22 @@ public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements o
 		mainPage.setErrorMessage(errorMessage);
 		mainPage.setPageComplete(errorMessage==null);
 		getContainer().updateButtons();
+	}
+
+	private boolean fileExists(IContainer container, String name){
+		try {
+			IResource[] members = container.members();
+			if(members!=null){
+				for (IResource member : members) {
+					if(member.getName().equalsIgnoreCase(name)){
+						return true;
+					}
+				}
+			}
+		} catch (CoreException e) {
+			JtagPerspective.logError("error checking file already exists",e);
+		}
+		return false;
 	}
 
 	@Override
@@ -182,8 +199,7 @@ public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements o
 				}
 			});
 		}catch(Exception e){
-			//catch all
-			return false;
+			JtagPerspective.logError("error creating jtag file", e);
 		}
 		return true;
 	}
@@ -204,7 +220,7 @@ public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements o
 		jtagFolder.getFiles().addAll(filesToAdd);
 
 		ResourceSet rs = resourceSetProvider.get(folder.getProject());
-		Resource resource = rs.createResource(URI.createPlatformResourceURI("test.jtag",true));
+		Resource resource = rs.createResource(URI.createPlatformResourceURI(folder.getProject().getName()+"/test.jtag",true));
 		resource.getContents().add(jtagFolder);
 
 		String result = jtagSerializer.serialize(jtagFolder, SaveOptions.newBuilder().noValidation().format().getOptions());
