@@ -12,9 +12,6 @@
       id="jtag.udatesites"
       label="">
     <requirement
-        name="org.eclipse.xtext.redist.feature.group"
-        versionRange="2.4.0"/>
-    <requirement
         name="de.nittka.tooling.jtag.sdk.feature.group"/>
     <repository
         url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
@@ -37,8 +34,24 @@
     <description>Opens Jtag perspective on first startup</description>
   </setupTask>
   <stream name="release"
-      label="Release">
+      label="Release (Oxygen and later!)">
+    <setupTask
+        xsi:type="setup.p2:P2Task">
+      <requirement
+          name="org.eclipse.xtext.redist.feature.group"
+          versionRange="2.4.0"/>
+    </setupTask>
     <description>installs the latest released version</description>
+  </stream>
+  <stream name="priorToOxygen"
+      label="Eclipse before Oxygen">
+    <setupTask
+        xsi:type="setup.p2:P2Task">
+      <requirement
+          name="org.eclipse.xtext.redist.feature.group"
+          versionRange="[2.4.0,2.15.0)"/>
+    </setupTask>
+    <description>Xtext 2.15 is not supported before Oxygen, use this stream to make sure an earlier Xtext is used</description>
   </stream>
   <description>
     Xtext based image tagging
