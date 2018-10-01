@@ -1,5 +1,6 @@
 package de.nittka.tooling.jtag.ui.wizard;
 
+import java.io.ByteArrayInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,6 @@ import org.eclipse.xtext.resource.SaveOptions;
 import org.eclipse.xtext.serializer.ISerializer;
 import org.eclipse.xtext.ui.resource.XtextResourceSetProvider;
 import org.eclipse.xtext.ui.util.FileOpener;
-import org.eclipse.xtext.util.StringInputStream;
 
 import com.google.common.base.Strings;
 
@@ -190,10 +190,10 @@ public class JtagFileWizard extends org.eclipse.jface.wizard.Wizard implements o
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					IFile newFile = folder.getFile(new Path(currentValidFileName));
 					try {
-						newFile.create(new StringInputStream( getInitialFileContent()), true, monitor);
+						newFile.create(new ByteArrayInputStream(getInitialFileContent().getBytes(newFile.getCharset())), true, monitor);
 						fileOpener.openFileToEdit(getShell(), newFile);
 						monitor.done();
-					} catch (CoreException e) {
+					} catch (Exception e) {
 						throw new InvocationTargetException(e);
 					}
 				}
