@@ -4,4 +4,6 @@
 ${cursor}</template>
   <template id="jtagSimpleTagsTemplate" autoinsert="true" context="de.nittka.tooling.jtag.Jtag.kw_tags" deleted="false" description="add tags to the file" enabled="true" name="tags">tags: ${tag}&#13;
 ${cursor}</template>
+  <template id="jtagSimpleDescriptionTemplate" autoinsert="true" context="de.nittka.tooling.jtag.Jtag.kw_description" deleted="false" description="add a description to the file" enabled="true" name="description">description "${description}"&#13;
+${cursor}</template>
 </templates>
