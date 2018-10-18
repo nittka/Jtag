@@ -46,22 +46,42 @@ public class JtagSearchHandler extends AbstractHandler {
 	@Inject
 	IResourceValidator validator;
 
+	@Override
+	public boolean isEnabled() {
+		XtextEditor editor = EditorUtils.getActiveXtextEditor();
+		if(editor!=null){
+			return editor.getDocument().readOnly(new IUnitOfWork<Boolean, XtextResource>(){
+
+				@Override
+				public Boolean exec(XtextResource state) throws Exception {
+					return isSearchState(state);
+				}
+
+			});
+		}else{
+			return false;
+		}
+	}
+
+	private boolean isSearchState(XtextResource state){
+		if(state != null && !state.getContents().isEmpty()){
+			EObject content = state.getContents().get(0);
+			return content instanceof JtagSearches;
+		}
+		return false;
+	}
+
 	//entry point adapted from FindReferencesHandler
 //	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		try {
 			XtextEditor editor = EditorUtils.getActiveXtextEditor(event);
-			if (editor != null) {
-				final ITextSelection selection = (ITextSelection) editor.getSelectionProvider().getSelection();
-				editor.getDocument().readOnly(new IUnitOfWork.Void<XtextResource>() {
-					@Override
-					public void process(XtextResource state) throws Exception {
-						if(state==null)return;
-						if(state.getContents().isEmpty() || !(state.getContents().get(0) instanceof JtagSearches)){
-							if(!state.getParseResult().getRootNode().getText().contains("search")){
-								return;
-							}
-						}
+			final ITextSelection selection = (ITextSelection) editor.getSelectionProvider().getSelection();
+			editor.getDocument().readOnly(new IUnitOfWork.Void<XtextResource>() {
+
+				@Override
+				public void process(XtextResource state) throws Exception {
+					if(isSearchState(state)){
 						//at this point we just make sure that seach is only executed on search objects
 						//(also excluding comments and white spaces before the search keyword)
 						EObject target = eObjectAtOffsetHelper.resolveContainedElementAt(state, selection.getOffset());
@@ -75,8 +95,9 @@ public class JtagSearchHandler extends AbstractHandler {
 							}
 						}
 					}
-				});
-			}
+				}
+
+			});
 		} catch (Exception e) {
 			JtagPerspective.logError("error executing jtag search", e);
 		}

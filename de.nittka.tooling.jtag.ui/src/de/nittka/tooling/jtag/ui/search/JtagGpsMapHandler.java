@@ -37,10 +37,45 @@ import de.nittka.tooling.jtag.jtag.Folder;
 import de.nittka.tooling.jtag.ui.JtagPerspective;
 import de.nittka.tooling.jtag.ui.internal.JtagActivator;
 
-public class JtagGpsMapHandler  extends AbstractHandler{
+public class JtagGpsMapHandler extends AbstractHandler{
 
 	@Inject
 	private JtagGpsPreview gpsPreview;
+
+	@Override
+	public boolean isEnabled() {
+		try{
+			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			ISelection selection = page.getSelection();
+			if(selection instanceof StructuredSelection){
+				return true;
+			}else if(selection instanceof TextSelection){
+				XtextEditor editor = EditorUtils.getActiveXtextEditor();
+				if(editor!=null){
+					return editor.getDocument().readOnly(new IUnitOfWork<Boolean, XtextResource>(){
+
+						@Override
+						public Boolean exec(XtextResource state) throws Exception {
+							return getFolder(state)!=null;
+						}
+
+					});
+				}
+			}
+		}catch(Exception e){
+			JtagPerspective.logError("error evaluating selection", e);
+		}
+		return false;
+	}
+
+	private Folder getFolder(XtextResource state){
+		if(state!=null && !state.getContents().isEmpty()){
+			if(state.getContents().get(0) instanceof Folder){
+				return (Folder)state.getContents().get(0);
+			}
+		}
+		return null;
+	}
 
 //	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -48,18 +83,17 @@ public class JtagGpsMapHandler  extends AbstractHandler{
 		ISelection selection = page.getSelection();
 		if(selection instanceof TextSelection){
 			XtextEditor editor = EditorUtils.getActiveXtextEditor(event);
-			if (editor != null) {
-				editor.getDocument().readOnly(new IUnitOfWork.Void<XtextResource>() {
-					@Override
-					public void process(XtextResource state) throws Exception {
-						if(state!=null && !state.getContents().isEmpty()){
-							if(state.getContents().get(0) instanceof Folder){
-								showHtml(gpsPreview.createHtml((Folder)state.getContents().get(0)));
-							}
-						}
+			editor.getDocument().readOnly(new IUnitOfWork.Void<XtextResource>(){
+
+				@Override
+				public void process(XtextResource state) throws Exception {
+					Folder folder=getFolder(state);
+					if(folder!=null){
+						showHtml(gpsPreview.createHtml(folder));
 					}
-				});
-			}
+				}
+
+			});
 		} else if(selection instanceof StructuredSelection){
 			Iterator<?> iterator = ((StructuredSelection) selection).iterator();
 			final Set<IFile> files=new HashSet<>();
@@ -91,7 +125,7 @@ public class JtagGpsMapHandler  extends AbstractHandler{
 
 	private void showHtml(String html){
 		if(html!=null){
-			File tempFile=  JtagActivator.getInstance().getStateLocation().append("JtagShowOnMap.html").toFile();
+			File tempFile=JtagActivator.getInstance().getStateLocation().append("JtagShowOnMap.html").toFile();
 			try {
 				Files.write(html, tempFile, StandardCharsets.ISO_8859_1);
 				PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(tempFile.toURI().toURL());
