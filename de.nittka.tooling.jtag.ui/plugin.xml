@@ -578,4 +578,32 @@
   <extension point="org.eclipse.core.runtime.preferences">
     <initializer class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:de.nittka.tooling.jtag.ui.preferences.JtagPreferenceInitializer"/>
   </extension>
+  <extension point="org.eclipse.ltk.core.refactoring.moveParticipants">
+    <moveParticipant class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:de.nittka.tooling.jtag.ui.refactoring.JtagMoveRefactoringParticipant" id="de.nittka.tooling.jtag.moveParticipant" name="prevent file operations">
+      <enablement>
+        <or>
+          <with variable="element">
+            <instanceof value="org.eclipse.core.resources.IFile"/>
+          </with>
+          <with variable="element">
+            <instanceof value="org.eclipse.core.resources.IContainer"/>
+          </with>
+        </or>
+      </enablement>
+    </moveParticipant>
+   </extension>
+  <extension point="org.eclipse.ltk.core.refactoring.deleteParticipants">
+    <moveParticipant class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:de.nittka.tooling.jtag.ui.refactoring.JtagDeleteRefactoringParticipant" id="de.nittka.tooling.jtag.deleteParticipant" name="prevent file operations">
+      <enablement>
+        <or>
+          <with variable="element">
+            <instanceof value="org.eclipse.core.resources.IFile"/>
+          </with>
+          <with variable="element">
+            <instanceof value="org.eclipse.core.resources.IContainer"/>
+          </with>
+        </or>
+      </enablement>
+    </moveParticipant>
+   </extension>
 </plugin>
