@@ -65,9 +65,16 @@ class JtagGpsPreview {
 			      «ENDFOR»
 			    ];
 
+			    var currentOpenPopup=null;
+			    window.onkeyup = function(event) {
+			      let key = event.key;
+			      if ( key === 'Escape' ) {
+			        closePopup();
+			      }
+			    }
+
 			    map = new OpenLayers.Map("mapdiv");
 			    map.addLayer(new OpenLayers.Layer.OSM());
-			
 			
 			    var markers = new OpenLayers.Layer.Markers( "Markers" );
 			    map.addLayer(markers);
@@ -96,13 +103,21 @@ class JtagGpsPreview {
 			      bounds.extend(lonLat);
 			      var marker=new OpenLayers.Marker(lonLat);
 			      markers.addMarker(marker);
-			      marker.events.register('mouseover', marker, function() {
+			      marker.events.register('click', marker, function() {
+			        closePopup();
 			        var popup = new OpenLayers.Popup.FramedCloud(id, lonLat, null, 
 			        '<div class="popup"><div>'+title+'</div><img src="'+imgLocation+'" title="'+imgLocation+'"></div>', 
-			        null, false);
+			        null, true);
 			        map.addPopup(popup);
-			        marker.events.register('mouseout', marker, setTimeout( function() { popup.destroy(); }, 4000));
+			        currentOpenPopup=popup;
 			      });
+			    }
+
+			    function closePopup(){
+			      if(currentOpenPopup!=null){
+			        currentOpenPopup.destroy();
+			        currentOpenPopup=null;
+			      }
 			    }
 			  </script>
 			</body></html>
