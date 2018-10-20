@@ -56,7 +56,11 @@
                     definitionId="de.nittka.tooling.jtag.Jtag.Editor.opened">
             </reference>
          </activeWhen>
-      	</handler>
+        </handler>
+        <handler
+            class="de.nittka.tooling.jtag.ui.view.JtagMaximizeImageViewHandler"
+            commandId="de.nittka.tooling.jtag.ui.maximizeImageView">
+        </handler>
       	<!-- copy qualified name -->
         <handler
             class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
@@ -179,6 +183,12 @@
             categoryId="org.eclipse.ui.category.navigate"
             description="Shows image location of the selection on a map"
             name="Show on map">
+      </command>
+      <command
+            id="de.nittka.tooling.jtag.ui.maximizeImageView"
+            categoryId="org.eclipse.ui.category.navigate"
+            description="Maximizes the Jtag Image View"
+            name="Maximize Jtag Image View">
       </command>
     </extension>
     <extension point="org.eclipse.ui.commandImages">
@@ -463,6 +473,12 @@
            contextId="org.eclipse.xtext.ui.XtextEditorScope"
            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
            sequence="M3+X">
+     </key>
+     <key
+           commandId="de.nittka.tooling.jtag.ui.maximizeImageView"
+           contextId="org.eclipse.ui.contexts.dialogAndWindow"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="M1+M2+M">
      </key>
   </extension>
   <extension point="org.eclipse.ui.views">
