@@ -185,7 +185,7 @@ public class JTagImageView extends ViewPart implements ISelectionListener, IPart
 						int selectionEndOffset=selection.getOffset()+selection.getLength();
 						if(fileNode.getOffset()<=selection.getOffset() && selectionEndOffset<=fileEndOffset){
 							String imageLocation = JtagFileURIs.getImageLocation(file);
-							showFile(imageLocation, false);
+							showFile(imageLocation, true);
 							return null;
 						}
 					}
