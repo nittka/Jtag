@@ -17,4 +17,7 @@ public class JtagRootPreferencePage extends LanguageRootPreferencePage {
 		addField(new BooleanFieldEditor(OPEN_GPS_BROWSER_ON_JTAG_SEARCH, "open browser for Jtag search results (GPS-Locations)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PREVENT_REFACTORING, "prevent dangerous file refactorings in Jtag Navigator", getFieldEditorParent()));
 	}
+
+	@Override
+	protected void noDefaultAndApplyButton() {}
 }
