@@ -11,15 +11,15 @@ Due to few images and none with gps data, the "Open preview in browser" and "Sho
   * Searches
   * Jtag file
 * Code Completion
-  * Category types
+  * Category types (+template)
   * Categories
   * Tags
-    * in file description
+    * in file description (+template)
     * in search
   * ignore in folder
     * (only) missing file
     * file patterns
-  * category template in file
+  * category and description template in file
   * date from exif
   * file name when description is missing
 * Validation
@@ -68,6 +68,7 @@ Due to few images and none with gps data, the "Open preview in browser" and "Sho
 * show on Map
 
 ## Jtag search
+* not enabled in definition/jtag file
 * no search executed if error in definition (also in reused named search, syntax errors in file/other searches)
 * simple text search (file name, title, description)
 * simple category search
@@ -106,7 +107,11 @@ show image
   * non-jtag files hidden if activated
 * Sorting
   * sort jtag files first, if activated
+* prevent move/delete of non-jtag files (+preference)
 
 ## Further features
 * copy used tags (all tags and count copied to clipboard)
 * in Jtag perspective Jtag Navigator and Image view are directly visible under "Window show View"
+* Show on map (not enabled in search or definition jtag)
+* maximize Image view with shift-ctrl-m (from editor, navigator, outline, search result)
+* help pointing to github wiki
