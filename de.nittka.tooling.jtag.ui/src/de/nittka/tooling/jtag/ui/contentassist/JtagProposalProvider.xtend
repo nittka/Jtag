@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.Assignment
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor
+import de.nittka.tooling.jtag.jtag.JtagFactory
 
 /**
  * see http://www.eclipse.org/Xtext/documentation.html#contentAssist on how to customize content assistant
@@ -61,5 +62,13 @@ class JtagProposalProvider extends AbstractJtagProposalProvider {
 		missingFiles.forEach[
 			acceptor.accept(createCompletionProposal(quickfix.maybeEscape(it), context))
 		]
+	}
+
+	override completeCategory_Name(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		acceptor.accept(createCompletionProposal("", "category name", getImage(JtagFactory.eINSTANCE.createCategory), context))
+	}
+
+	override completeCategoryType_Name(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		acceptor.accept(createCompletionProposal("", "category type name", getImage(JtagFactory.eINSTANCE.createCategoryType), context))
 	}
 }

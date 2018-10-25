@@ -39,7 +39,6 @@ import de.nittka.tooling.jtag.jtag.CategoryRef
 class JtagValidator extends AbstractJtagValidator {
 
 	val public static FILE_NAME="filename"
-	val public static MISSING_CATEGORY="missingCategory"
 
 	@Inject
 	private ResourceDescriptionsProvider indexProvider
