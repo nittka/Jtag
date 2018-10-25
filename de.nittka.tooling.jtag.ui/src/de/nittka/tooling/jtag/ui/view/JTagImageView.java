@@ -29,6 +29,7 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.xtext.EcoreUtil2;
@@ -73,6 +74,7 @@ public class JTagImageView extends ViewPart implements ISelectionListener, IPart
 		imageDisplay=new Composite(parent, SWT.NONE);
 		imageDisplay.setBackgroundMode(SWT.INHERIT_FORCE);
 		ensureRedrawOnResize();
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(imageDisplay, "de.nittka.tooling.jtag.ui.jtagHelp");
 	}
 
 	private void ensureRedrawOnResize(){
@@ -93,7 +95,11 @@ public class JTagImageView extends ViewPart implements ISelectionListener, IPart
 	}
 
 	@Override
-	public void setFocus() {}
+	public void setFocus() {
+		if(imageDisplay!=null){
+			imageDisplay.setFocus();
+		}
+	}
 
 	public void partActivated(IWorkbenchPart part) {
 		IPostSelectionProvider provider = getSelectionProvider(part);

@@ -22,6 +22,7 @@ public class JtagXtextEditor extends XtextEditor {
 
 	@Override
 	public void createPartControl(Composite parent) {
+		setHelpContextId("de.nittka.tooling.jtag.ui.jtagHelp");
 		super.createPartControl(parent);
 		boolean foldPreference=getPreferenceStore().getBoolean(JtagRootPreferencePage.FOLD_FILE_DESCRIPTIONS);
 		boolean shouldFold=foldPreference && getDocument().readOnly(new IUnitOfWork<Boolean, XtextResource>() {

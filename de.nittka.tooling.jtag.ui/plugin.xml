@@ -496,7 +496,7 @@
       restorable="true"/>
   </extension>
   <extension point="org.eclipse.ui.navigator.viewer">
-    <viewer viewerId="de.nittka.tooling.jtag.navigatorView"/>
+    <viewer viewerId="de.nittka.tooling.jtag.navigatorView" helpContext="de.nittka.tooling.jtag.ui.jtagHelp"/>
     <viewerContentBinding viewerId="de.nittka.tooling.jtag.navigatorView">
       <includes>
         <contentExtension pattern="org.eclipse.ui.navigator.resourceContent"/>
@@ -621,5 +621,12 @@
         </or>
       </enablement>
     </moveParticipant>
+   </extension>
+   <extension point="org.eclipse.help.toc">
+      <toc file="help/jtag-help-toc.xml" primary="true"></toc>
+   </extension>
+   <extension point="org.eclipse.help.contexts">
+     <contexts file="help/jtag-help-contexts.xml" plugin="de.nittka.tooling.jtag.ui">
+     </contexts>
    </extension>
 </plugin>

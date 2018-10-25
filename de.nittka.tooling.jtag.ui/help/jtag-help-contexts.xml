@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<contexts>
+    <context id="jtagHelp">
+        <description>The Jtag documentation can be found in the projects's wiki.</description>
+        <topic href="help/jtag-help.html" label="Jtag documentation" />
+    </context>
+</contexts>
