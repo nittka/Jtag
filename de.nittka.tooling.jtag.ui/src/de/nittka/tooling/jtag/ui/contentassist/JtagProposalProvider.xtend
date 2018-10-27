@@ -3,8 +3,10 @@
  */
 package de.nittka.tooling.jtag.ui.contentassist
 
+import de.nittka.tooling.jtag.jtag.CategoryRef
 import de.nittka.tooling.jtag.jtag.File
 import de.nittka.tooling.jtag.jtag.Folder
+import de.nittka.tooling.jtag.jtag.JtagFactory
 import de.nittka.tooling.jtag.ui.quickfix.JtagQuickfixProvider
 import de.nittka.tooling.jtag.ui.search.JtagTagCounter
 import de.nittka.tooling.jtag.ui.validation.JtagUIValidator
@@ -13,9 +15,9 @@ import org.eclipse.core.resources.IWorkspace
 import org.eclipse.core.runtime.Path
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.Assignment
+import org.eclipse.xtext.Keyword
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor
-import de.nittka.tooling.jtag.jtag.JtagFactory
 
 /**
  * see http://www.eclipse.org/Xtext/documentation.html#contentAssist on how to customize content assistant
@@ -70,5 +72,19 @@ class JtagProposalProvider extends AbstractJtagProposalProvider {
 
 	override completeCategoryType_Name(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		acceptor.accept(createCompletionProposal("", "category type name", getImage(JtagFactory.eINSTANCE.createCategoryType), context))
+	}
+
+	override completeKeyword(Keyword keyword, ContentAssistContext contentAssistContext, ICompletionProposalAcceptor acceptor) {
+		if(keyword.value==":"){
+			val m=contentAssistContext.currentModel
+			if(m instanceof CategoryRef){
+				val type=(m as CategoryRef).type
+				if(type.eIsProxy){
+					//do not propose colon if category type is invalid
+					return
+				}
+			}
+		}
+		super.completeKeyword(keyword, contentAssistContext, acceptor)
 	}
 }
