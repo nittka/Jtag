@@ -7,11 +7,11 @@ Technologically, it is an adapted copy of [Xarchive](https://github.com/nittka/X
 Within a single project you keep
 * a definition file for _categories_ (one file in the project root)
 * folders with images, clips etc. 
-* for each folder a jtag file containing meta data for images within this folder (excluding subfolders)
-* one or more files with searches
+* for each folder a Jtag file containing meta data for images within this folder (excluding subfolders)
+* one or more search files
 
 Supported meta data includes
-* global information (folder name, categories and tags that apply to all images within the folder)
+* global information (folder description, categories and tags that apply to all files within the folder)
 * file name
 * title
 * date
@@ -51,7 +51,7 @@ categoriesFor occasion {
 }
 ```
 
-### jtag file
+### Jtag file
 
 ```
 //global information
@@ -116,14 +116,17 @@ search category persons:son && date from 2016-?-? to 2017-06-?
 * view showing the image currently selected in
   * navigator
   * editor
-  * outline
+  * outline (and quick outline)
   * search view
+  * key binding for quickly maximizing the image view (directly from all others)
 * Jtag perspective
   * default views (navigator, image preview, problems/outliene)
   * navigator with quick access to new jtag file wizard
   * optional navigator filter (show only jtag files)
   * navigator sorting (jtag file before any other files)
   * show selected images on a map (if GPS data is present)
+  * prevent accidental refactoring of non-jtag files
+  * decoration for folders with missing jtag file
 
 ## Limitations
 
@@ -133,11 +136,11 @@ File names containing other characters may be written in double quotes.
 
 ## Installation
 
-You need an Eclipse with an Xtext runtime (2.4. or later).
+You need an Eclipse with an Xtext runtime (2.6. or later).
 If you use the Eclipse installer (Oomph) you can use the following project setup URL: [https://raw.githubusercontent.com/nittka/Jtag/master/JtagUser.setup](https://raw.githubusercontent.com/nittka/Jtag/master/JtagUser.setup).
 The Jtag update site is [https://www.nittka.de/download/jtag](https://www.nittka.de/download/jtag).
 
-metadata-extractor.jar is used under the The Apache Software License, Version 2.0, xmp-core under the BSD License [see](https://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html).
+metadata-extractor.jar is used under the The Apache Software License, Version 2.0, xmp-core under the BSD License ([see here](https://www.adobe.com/devnet/xmp/library/eula-xmp-library-java.html)).
 Both are only used for extracting the date of a picture for the missing description quickfix and for extracting GPS data.
 
 ## Documentation
