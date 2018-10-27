@@ -35,6 +35,14 @@ public class JtagFileURIs {
 		}
 	}
 
+	public static String getImageLocation(URI imageFileURI){
+		IResource wsFile = ResourcesPlugin.getWorkspace().getRoot().findMember(imageFileURI.toPlatformString(true));
+		if(wsFile.exists() && isImageExtension(imageFileURI.fileExtension())){
+			return wsFile.getLocation().toString();
+		}
+		return null;
+	}
+	
 	/**
 	 * location of files with image extension supported for both Jtag view and html (hover and search)
 	 * */

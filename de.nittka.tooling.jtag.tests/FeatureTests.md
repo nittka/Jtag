@@ -52,7 +52,9 @@ Due to few images and none with gps data, the "Open preview in browser" and "Sho
   * category description
   * file image
 * Labels an images in
-  * Outline (all file types)
+  * Outline
+    * all file types
+    * ignored files shown depending on preference flag
   * search result (find references and Jtag search)
 * Go to declaration (F3)
   * on category type (file/search)

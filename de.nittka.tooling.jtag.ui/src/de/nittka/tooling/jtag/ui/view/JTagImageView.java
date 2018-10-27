@@ -48,6 +48,7 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import de.nittka.tooling.jtag.jtag.File;
 import de.nittka.tooling.jtag.ui.JtagFileURIs;
 import de.nittka.tooling.jtag.ui.JtagXtextEditor;
+import de.nittka.tooling.jtag.ui.outline.IgnoreFileOutlineNode;
 
 public class JTagImageView extends ViewPart implements ISelectionListener, IPartListener, ISelectionChangedListener {
 
@@ -145,10 +146,14 @@ public class JTagImageView extends ViewPart implements ISelectionListener, IPart
 				if(element instanceof IFile){
 					showFile(((IFile) element).getLocation().toString(), true);
 					return;
-				}else if(element instanceof EObjectNode){
+				} else if(element instanceof EObjectNode){
 					if(isPreviewFromOutline((EObjectNode)element)){
 						return;
 					}
+				} else if(element instanceof IgnoreFileOutlineNode){
+					URI fileURI=((IgnoreFileOutlineNode)element).getFileURI();
+					showFile(JtagFileURIs.getImageLocation(fileURI), true);
+					return;
 				}
 			}
 			hideFile();

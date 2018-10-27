@@ -15,6 +15,7 @@ import org.eclipse.xtext.validation.Check
 import org.eclipse.xtext.validation.CheckType
 import de.nittka.tooling.jtag.jtag.TagSearch
 import de.nittka.tooling.jtag.ui.search.JtagTagCounter
+import java.util.Set
 
 class JtagUIValidator extends JtagValidator {
 
@@ -68,6 +69,18 @@ class JtagUIValidator extends JtagValidator {
 
 	def private static String prepareIgnorePattern(String patternString){
 		return patternString.replaceAll("\\.","\\\\.").replaceAll("\\*","\\.*").replaceAll("\\(","\\\\(").replaceAll("\\)","\\\\)")
+	}
+
+	def static List<String> getIgnoredFiles(Folder folder, IWorkspace ws){
+		val Set<String> result=newHashSet
+		if(!folder.ignore.empty){
+			val missingFiles=getFilesWithoutDefinition(folder, ws, false)
+			folder.ignore.forEach[
+				val pattern=prepareIgnorePattern
+				result.addAll(missingFiles.filter[file|file.matches(pattern)])
+			]
+		}
+		return result.toList.sort
 	}
 
 	@Check(CheckType.NORMAL)
