@@ -2,15 +2,16 @@
 
 ## Scope
 
-Jtag is a lightweight Xtext based photo tagging system. Technologically, it is an adapted copy of [Xarchive](https://github.com/nittka/Xarchive).
+Jtag is a lightweight Xtext based image tagging system.
+Technologically, it is an adapted copy of [Xarchive](https://github.com/nittka/Xarchive).
 Within a single project you keep
 * a definition file for _categories_ (one file in the project root)
-* folders with photos, clips etc. 
-* for each folder a `jtag` file containing meta data for photos within this folder (excluding subfolders)
+* folders with images, clips etc. 
+* for each folder a jtag file containing meta data for images within this folder (excluding subfolders)
 * one or more files with searches
 
 Supported meta data includes
-* global information (folder name, categories and tags that apply to all files within the folder)
+* global information (folder name, categories and tags that apply to all images within the folder)
 * file name
 * title
 * date
@@ -55,12 +56,12 @@ categoriesFor occasion {
 ```
 //global information
 folder "Vacation 2017"
-//optional list of file patterns ignored when checking for missing entries
+//optional list of file name patterns ignored when checking for missing entries
 ignore: "*.txt", "ignore.jpg"
 occasion: vacation;
 tags: Sweden
 
-// start single files
+// start single file entry
 //file name, date and short title
 IMG_0011.jpg 2017-02-11 "arrival in Stockholm"
 //categories
@@ -87,7 +88,7 @@ search category persons:son && date from 2016-?-? to 2017-06-?
 
 ## Features
 
-* define your own category hierarchies for describing your photos
+* define your own category hierarchies for describing your images
 * hover
   * on category shows descriptions (if provided)
   * on image file name shows thumbnail
@@ -98,7 +99,7 @@ search category persons:son && date from 2016-?-? to 2017-06-?
   * files to ignore
 * validation (+ quickfixes for some)
   * document not found
-  * missing metadata for a file within a folder
+  * missing metadata for a image within a folder
   * duplicate names
   * date search patterns
 * navigation using F3
@@ -126,7 +127,7 @@ search category persons:son && date from 2016-?-? to 2017-06-?
 
 ## Limitations
 
-All files within must be contained in one project.
+All files must be contained in one project.
 For simlicity file names, tags, categories etc. have a restricted character set (a-z, A-Z, digits, undersore and dash).
 File names containing other characters may be written in double quotes.
 
