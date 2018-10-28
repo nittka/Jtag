@@ -18,6 +18,8 @@ Supported meta data includes
 * list of tags — additional keywords applying to the document
 * description
 
+![Jtag in action](https://raw.githubusercontent.com/wiki/nittka/Jtag/full_screenshot.jpg)
+
 ## Syntax
 
 ### definition file
