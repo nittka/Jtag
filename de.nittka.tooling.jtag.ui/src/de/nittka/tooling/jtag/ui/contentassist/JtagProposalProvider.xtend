@@ -31,12 +31,19 @@ class JtagProposalProvider extends AbstractJtagProposalProvider {
 	@Inject
 	JtagQuickfixProvider quickfix
 
+	override completeFolder_Tags(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		completeTags(model, context, acceptor)
+	}
+
 	override completeFile_Tags(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-		val tags=tagCounter.getTags(model.eResource)
-		tags.forEach[acceptor.accept(createCompletionProposal(context))]
+		completeTags(model, context, acceptor)
 	}
 
 	override completeTagSearch_Tag(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		completeTags(model, context, acceptor)
+	}
+
+	def private completeTags(EObject model, ContentAssistContext context, ICompletionProposalAcceptor acceptor){
 		val tags=tagCounter.getTags(model.eResource)
 		tags.forEach[acceptor.accept(createCompletionProposal(context))]
 	}

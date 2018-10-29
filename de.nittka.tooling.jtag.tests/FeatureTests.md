@@ -16,6 +16,7 @@ Due to few images and none with gps data, the "Open preview in browser" and "Sho
   * Tags
     * in file description (+template)
     * in search
+    * for folder
   * ignore in folder
     * (only) missing file
     * file patterns
