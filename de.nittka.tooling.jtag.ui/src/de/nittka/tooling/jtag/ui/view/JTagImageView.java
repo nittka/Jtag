@@ -83,7 +83,7 @@ public class JTagImageView extends ViewPart implements ISelectionListener, IPart
 		imageDisplay.getParent().addControlListener(new ControlAdapter() {
 			@Override
 			public void controlResized(ControlEvent e) {
-				imageDisplay.setBackgroundImage(null);
+				setNewBackground(null);
 			}
 		});
 		//redraw when resizing image composite
@@ -250,7 +250,7 @@ public class JTagImageView extends ViewPart implements ISelectionListener, IPart
 		}catch (Exception e){
 			if(force){
 				currentImage=null;
-				imageDisplay.setBackgroundImage(null);
+				setNewBackground(null);
 			}
 		}
 	}
@@ -262,8 +262,18 @@ public class JTagImageView extends ViewPart implements ISelectionListener, IPart
 			Point imageSize=getImageSize(availableSize, imageData);
 			Image scaled=new Image(imageDisplay.getDisplay(),imageData.scaledTo(imageSize.x, imageSize.y));
 			imageDisplay.setSize(scaled.getImageData().width, scaled.getImageData().height);
-			imageDisplay.setBackgroundImage(scaled);
+			setNewBackground(scaled);
 			imageDisplay.setLocation((availableSize.x-imageSize.x)/2, (availableSize.y-imageSize.y)/2);
+		}
+	}
+
+	private void setNewBackground(Image image){
+		if(imageDisplay!=null && !imageDisplay.isDisposed()){
+			Image oldBackground = imageDisplay.getBackgroundImage();
+			if(oldBackground!=null && !oldBackground.isDisposed()){
+				oldBackground.dispose();
+			}
+			imageDisplay.setBackgroundImage(image);
 		}
 	}
 
