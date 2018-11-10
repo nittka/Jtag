@@ -621,12 +621,17 @@
         </or>
       </enablement>
     </moveParticipant>
-   </extension>
-   <extension point="org.eclipse.help.toc">
-      <toc file="help/jtag-help-toc.xml" primary="true"></toc>
-   </extension>
-   <extension point="org.eclipse.help.contexts">
-     <contexts file="help/jtag-help-contexts.xml" plugin="de.nittka.tooling.jtag.ui">
-     </contexts>
-   </extension>
+  </extension>
+  <extension point="org.eclipse.help.toc">
+     <toc file="help/jtag-help-toc.xml" primary="true"></toc>
+  </extension>
+  <extension point="org.eclipse.help.contexts">
+    <contexts file="help/jtag-help-contexts.xml" plugin="de.nittka.tooling.jtag.ui">
+    </contexts>
+  </extension>
+  <extension point="org.eclipse.ui.decorators">
+    <decorator class="de.nittka.tooling.jtag.ui.view.NoJtagFileDecorator" id="de.nittka.tooling.jtag.ui.decorators.missingJtagFile" label="Jtag file missing" lightweight="true" state="true">
+      <description>Marks folders missing a Jtag file (and their parent folders).</description>
+    </decorator>
+  </extension>
 </plugin>

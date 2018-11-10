@@ -111,6 +111,7 @@ show image
 * Sorting
   * sort jtag files first, if activated
 * prevent move/delete of non-jtag files (+preference)
+* folder decoration for missing jtag files (+label decorations preference)
 
 ## Further features
 * copy used tags (all tags and count copied to clipboard)
