@@ -19,6 +19,10 @@ public class IgnoreFileOutlineNode extends EStructuralFeatureNode {
 	 * */
 	public URI getFileURI(){
 		URI folderURI=getEObjectURI().trimSegments(1);
-		return folderURI.appendSegment((String)getText());
+		String fileName = (String)getText();
+		if(fileName.indexOf('#')>=0){
+			fileName=fileName.replaceAll("#", "%23");
+		}
+		return folderURI.appendSegment(fileName);
 	}
 }
