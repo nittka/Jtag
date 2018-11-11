@@ -306,7 +306,7 @@
 	<extension
 		point="org.eclipse.ui.handlers">
 		<handler 
-			class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
+			class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:de.nittka.tooling.jtag.ui.outline.JtagShowQuickOutlineActionHandler"
 			commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline">
 			<activeWhen>
 				<reference

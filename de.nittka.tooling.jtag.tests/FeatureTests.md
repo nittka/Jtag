@@ -93,9 +93,10 @@ Due to few images and none with gps data, the "Open preview in browser" and "Sho
 show image
 * navigator single file selection
 * jtag folder outline single selection
-* jtag Jtag search result single selection
+* Jtag search result single selection
 * find references search result single selection
 * jtag editor single file selected
+* jtag editor quick outline single file selected 
 
 ## Jtag Navigator
 * new Jtag file and search wizard
