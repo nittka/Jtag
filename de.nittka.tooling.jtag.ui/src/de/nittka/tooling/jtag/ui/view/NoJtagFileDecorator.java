@@ -21,9 +21,9 @@ import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 
-import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 import de.nittka.tooling.jtag.ui.JtagPerspective;
 import de.nittka.tooling.jtag.ui.internal.JtagActivator;
@@ -32,7 +32,7 @@ public class NoJtagFileDecorator extends BaseLabelProvider implements ILightweig
 
 	private static final ImageDescriptor ICON = JtagActivator.imageDescriptorFromPlugin(
 			"de.nittka.tooling.jtag.ui","icons/jtag_missing.png");
-	Cache<IContainer, Boolean> cache = CacheBuilder.newBuilder().expireAfterWrite(500, TimeUnit.MILLISECONDS)
+	LoadingCache<IContainer, Boolean> cache = CacheBuilder.newBuilder().expireAfterWrite(500, TimeUnit.MILLISECONDS)
 			.maximumSize(100).weakKeys().build(new CacheLoader<IContainer, Boolean>() {
 				@Override
 				public Boolean load(IContainer key) throws Exception {
