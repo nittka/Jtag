@@ -94,14 +94,16 @@ public class NoJtagFileDecorator extends BaseLabelProvider implements ILightweig
 
 	private boolean hasJtagFile(IContainer container) throws CoreException {
 		IResource[] members = container.members();
+		boolean needsJtagFile=false;
 		for (IResource r : members) {
 			if (r instanceof IFile) {
 				if ("jtag".equals(r.getFileExtension())) {
 					return true;
 				}
+				needsJtagFile=true;
 			}
 		}
-		return false;
+		return !needsJtagFile;
 	}
 
 	//update parents' decorations on resource change
