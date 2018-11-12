@@ -112,7 +112,7 @@ public class JtagSearchHandler extends AbstractHandler {
 				if(issue.getSeverity()==Severity.ERROR){
 					if(issue.getUriToProblem()!=null){
 						String errorFragment = issue.getUriToProblem().fragment();
-						if(errorFragment.startsWith(searchFragment)){
+						if(errorFragment.equals(searchFragment) || errorFragment.startsWith(searchFragment+"/")){
 							return true;
 						}
 					}
