@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.nittka.tooling.jtag.tests
-Bundle-Version: 1.0.3.qualifier
+Bundle-Version: 1.0.4.qualifier
 Bundle-SymbolicName: de.nittka.tooling.jtag.tests; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: de.nittka.tooling.jtag,
