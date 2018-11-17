@@ -44,8 +44,18 @@ class JtagProposalProvider extends AbstractJtagProposalProvider {
 	}
 
 	def private completeTags(EObject model, ContentAssistContext context, ICompletionProposalAcceptor acceptor){
-		val tags=tagCounter.getTags(model.eResource)
-		tags.forEach[acceptor.accept(createCompletionProposal(context))]
+		val tags=tagCounter.getTagCount(model.eResource)
+		val prefix=context.prefix
+		if(prefix.empty) {
+			tags.keySet.forEach[acceptor.accept(createCompletionProposal(context))]
+		} else {
+			tags.forEach[tag, count|
+				//prevent proposal of prefix+tag immediately following (aquickfix) 
+				if(count.get>1) {
+					acceptor.accept(createCompletionProposal(tag, context))
+				}
+			]
+		}
 	}
 
 	def completeFolder_Ignore(Folder model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
