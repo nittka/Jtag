@@ -19,11 +19,21 @@
         url="https://www.nittka.de/download/jtag"/>
   </setupTask>
   <setupTask
-      xsi:type="setup:PreferenceTask"
-      id="jtag.perspective.default"
-      key="/instance/org.eclipse.ui/defaultPerspectiveId"
-      value="de.nittka.tooling.jtag.perspective">
-    <description>set the Jtag perspective as default perspective</description>
+      xsi:type="setup:CompoundTask"
+      id="jtag.preferences"
+      name="Preferences">
+    <setupTask
+        xsi:type="setup:PreferenceTask"
+        id="jtag.perspective.default"
+        key="/instance/org.eclipse.ui/defaultPerspectiveId"
+        value="de.nittka.tooling.jtag.perspective">
+      <description>set the Jtag perspective as default perspective</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:PreferenceTask"
+        key="/instance/org.eclipse.ui.ide/REFRESH_WORKSPACE_ON_STARTUP"
+        value="true"/>
+    <description></description>
   </setupTask>
   <setupTask
       xsi:type="setup:EclipseIniTask"
