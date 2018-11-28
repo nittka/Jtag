@@ -102,19 +102,22 @@ public class JtagGpsMapHandler extends AbstractHandler{
 				if(next instanceof IFile){
 					files.add((IFile) next);
 				}else if(next instanceof IContainer){
-					try {
-						((IContainer) next).accept(new IResourceVisitor() {
-							
-							@Override
-							public boolean visit(IResource resource) throws CoreException {
-								if(resource instanceof IFile){
-									files.add((IFile)resource);
+					IContainer container = (IContainer) next;
+					if(container.isAccessible()){
+						try {
+							container.accept(new IResourceVisitor() {
+								
+								@Override
+								public boolean visit(IResource resource) throws CoreException {
+									if(resource instanceof IFile){
+										files.add((IFile)resource);
+									}
+									return true;
 								}
-								return true;
-							}
-						});
-					} catch (CoreException e) {
-						JtagPerspective.logError("error collecting files from selection", e);
+							});
+						} catch (CoreException e) {
+							JtagPerspective.logError("error collecting files from selection", e);
+						}
 					}
 				}
 			}
