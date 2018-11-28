@@ -109,22 +109,25 @@ public class NoJtagFileDecorator extends BaseLabelProvider implements ILightweig
 	//update parents' decorations on resource change
 	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
-		try {
-			event.getDelta().accept(new IResourceDeltaVisitor() {
-
-				@Override
-				public boolean visit(IResourceDelta delta) throws CoreException {
-					if (delta.getKind() == IResourceDelta.REMOVED || delta.getKind() == IResourceDelta.ADDED) {
-						if (delta.getResource() != null) {
-							refresh(delta.getResource().getParent());
+		IResourceDelta delta = event.getDelta();
+		if(delta!=null){
+			try {
+				event.getDelta().accept(new IResourceDeltaVisitor() {
+					
+					@Override
+					public boolean visit(IResourceDelta delta) throws CoreException {
+						if (delta.getKind() == IResourceDelta.REMOVED || delta.getKind() == IResourceDelta.ADDED) {
+							if (delta.getResource() != null) {
+								refresh(delta.getResource().getParent());
+							}
+							return false;
 						}
-						return false;
+						return true;
 					}
-					return true;
-				}
-			});
-		} catch (CoreException e) {
-			JtagPerspective.logError("error preparing missing jtag decorator update", e);
+				});
+			} catch (CoreException e) {
+				JtagPerspective.logError("error preparing missing jtag decorator update", e);
+			}
 		}
 	}
 
