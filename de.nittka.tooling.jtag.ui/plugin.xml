@@ -491,7 +491,7 @@
     <view id="de.nittka.tooling.jtag.navigatorView"
       category="de.nittka.tooling.jtag.viewCategory"
       name="Jtag Navigator"
-      class="org.eclipse.ui.navigator.CommonNavigator"
+      class="de.nittka.tooling.jtag.ui.view.JtagNavigator"
       icon="icons/navigator.gif"
       restorable="true"/>
   </extension>
