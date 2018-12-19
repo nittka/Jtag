@@ -1,5 +1,7 @@
 package de.nittka.tooling.jtag.ui.view;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -20,7 +22,7 @@ import de.nittka.tooling.jtag.ui.JtagPerspective;
 public class JtagNavigator extends CommonNavigator {
 
 	StatusLineContributionItem folderInfo = new StatusLineContributionItem(
-			"de.nittka.tooling.jtag.navigatorView.childCount", 25);
+			"de.nittka.tooling.jtag.navigatorView.childCount", 35);
 
 	@Override
 	protected void initListeners(TreeViewer viewer) {
@@ -75,19 +77,29 @@ public class JtagNavigator extends CommonNavigator {
 	}
 
 	private String getChildCountString(IContainer c) {
-		int fileCount = 0;
-		int folderCount = 0;
+		AtomicInteger childFolderCount=new AtomicInteger(0);
+		AtomicInteger childFileCount=new AtomicInteger(0);
+		AtomicInteger allFolderCount=new AtomicInteger(0);
+		AtomicInteger allFileCount=new AtomicInteger(0);
 		try {
-			for (IResource r : c.members()) {
-				if (r instanceof IContainer) {
-					folderCount++;
-				} else if ((r instanceof IFile) && !"jtag".equals(r.getFileExtension())) {
-					fileCount++;
-				}
-			}
+			count(c, childFolderCount, childFileCount, false);
+			count(c, allFolderCount, allFileCount, true);
 		} catch (CoreException e) {
 			return null;
 		}
-		return fileCount + " files, " + folderCount + " folders";
+		return String.format("Files: %d (%d); Folders: %d (%d)", childFileCount.get(), allFileCount.get(), childFolderCount.get(), allFolderCount.get());
+	}
+
+	private void count(IContainer c, AtomicInteger folderCount, AtomicInteger fileCount, boolean recursive) throws CoreException{
+		for (IResource r : c.members()) {
+			if (r instanceof IContainer) {
+				folderCount.incrementAndGet();
+				if(recursive){
+					count((IContainer)r, folderCount, fileCount, recursive);
+				}
+			} else if ((r instanceof IFile) && !"jtag".equals(r.getFileExtension())) {
+				fileCount.incrementAndGet();
+			}
+		}
 	}
 }
