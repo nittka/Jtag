@@ -61,6 +61,15 @@
             class="de.nittka.tooling.jtag.ui.view.JtagMaximizeImageViewHandler"
             commandId="de.nittka.tooling.jtag.ui.maximizeImageView">
         </handler>
+        <handler
+            class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:de.nittka.tooling.jtag.ui.view.JtagEditorNavigateHandler"
+            commandId="de.nittka.tooling.jtag.ui.navigateJtagEntry">
+         <activeWhen>
+            <reference
+                    definitionId="de.nittka.tooling.jtag.Jtag.Editor.opened">
+            </reference>
+         </activeWhen>
+        </handler>
       	<!-- copy qualified name -->
         <handler
             class="de.nittka.tooling.jtag.ui.JtagExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
@@ -189,6 +198,17 @@
             categoryId="org.eclipse.ui.category.navigate"
             description="Maximizes the Jtag Image View"
             name="Maximize Jtag Image View">
+      </command>
+      <command
+            id="de.nittka.tooling.jtag.ui.navigateJtagEntry"
+            categoryId="org.eclipse.ui.category.navigate"
+            description="Go to the next Jtag entry"
+            name="next Jtag Entry">
+         <commandParameter
+           id ="de.nittka.tooling.jtag.ui.navigateJtagEntry.direction"
+           name ="navigate direction"
+           optional="false">
+         </commandParameter>
       </command>
     </extension>
     <extension point="org.eclipse.ui.commandImages">
@@ -479,6 +499,20 @@
            contextId="org.eclipse.ui.contexts.dialogAndWindow"
            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
            sequence="M1+M2+M">
+     </key>
+     <key
+           commandId="de.nittka.tooling.jtag.ui.navigateJtagEntry"
+           contextId="org.eclipse.xtext.ui.XtextEditorScope"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="M1+M2+ARROW_DOWN">
+        <parameter id="de.nittka.tooling.jtag.ui.navigateJtagEntry.direction" value="down"/>
+     </key>
+     <key
+           commandId="de.nittka.tooling.jtag.ui.navigateJtagEntry"
+           contextId="org.eclipse.xtext.ui.XtextEditorScope"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="M1+M2+ARROW_UP">
+        <parameter id="de.nittka.tooling.jtag.ui.navigateJtagEntry.direction" value="up"/>
      </key>
   </extension>
   <extension point="org.eclipse.ui.views">
