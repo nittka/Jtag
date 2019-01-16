@@ -263,17 +263,23 @@ public class JTagImageView extends ViewPart implements ISelectionListener, IPart
 			Image scaled=new Image(imageDisplay.getDisplay(),imageData.scaledTo(imageSize.x, imageSize.y));
 			imageDisplay.setSize(scaled.getImageData().width, scaled.getImageData().height);
 			setNewBackground(scaled);
+			disposeImage(image);
 			imageDisplay.setLocation((availableSize.x-imageSize.x)/2, (availableSize.y-imageSize.y)/2);
 		}
 	}
 
+
 	private void setNewBackground(Image image){
 		if(imageDisplay!=null && !imageDisplay.isDisposed()){
 			Image oldBackground = imageDisplay.getBackgroundImage();
-			if(oldBackground!=null && !oldBackground.isDisposed()){
-				oldBackground.dispose();
-			}
+			disposeImage(oldBackground);
 			imageDisplay.setBackgroundImage(image);
+		}
+	}
+
+	private void disposeImage(Image image){
+		if(image!=null && !image.isDisposed()){
+			image.dispose();
 		}
 	}
 
