@@ -13,10 +13,14 @@
       label="">
     <requirement
         name="de.nittka.tooling.jtag.sdk.feature.group"/>
+    <requirement
+        name="moreclipboard.feature.feature.group"/>
     <repository
         url="http://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/"/>
     <repository
         url="https://www.nittka.de/download/jtag"/>
+    <repository
+        url="https://raw.github.com/mikhail-barg/moreclipboard/master/site"/>
   </setupTask>
   <setupTask
       xsi:type="setup:CompoundTask"
