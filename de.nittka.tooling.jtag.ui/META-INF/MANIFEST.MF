@@ -28,3 +28,4 @@ Export-Package: de.nittka.tooling.jtag.ui.quickfix,
  de.nittka.tooling.jtag.ui.internal
 Bundle-Activator: de.nittka.tooling.jtag.ui.internal.JtagActivator
 Bundle-ClassPath: .
+Bundle-Vendor: Alexander Nittka

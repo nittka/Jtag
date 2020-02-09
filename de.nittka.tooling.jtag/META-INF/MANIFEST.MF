@@ -30,3 +30,4 @@ Export-Package: de.nittka.tooling.jtag,
  de.nittka.tooling.jtag.serializer,
  de.nittka.tooling.jtag.services,
  de.nittka.tooling.jtag.validation
+Bundle-Vendor: Alexander Nittka
